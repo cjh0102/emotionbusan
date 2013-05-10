@@ -61,7 +61,12 @@ public class TalksRoomListAdapter extends BaseAdapter {
 		TextView timeTextView = (TextView) view.findViewById(R.id.timeTextView);
 		
 		setStringToView(entity, titleTextView, "title");
-
+		
+		if (entity.getCreated() != null) {
+			String createdTime = EtcUtils.getDateString(entity.getCreated());
+			timeTextView.setText(createdTime);
+		}
+		
 		return view;
 	}
 }
