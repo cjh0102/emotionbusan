@@ -7,6 +7,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -137,5 +139,13 @@ public class TalksRoomActivity extends Activity {
 		talksRoomListView = (ListView) findViewById(R.id.talksroomListView);
 		adapter = new TalksRoomListAdapter(TalksRoomActivity.this, posts);
 		talksRoomListView.setAdapter(adapter);
+		
+		talksRoomListView.setOnItemClickListener(new OnItemClickListener(){
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				
+			}
+		});
 	}
 }
