@@ -24,20 +24,24 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f080008;
+        public static final int action_settings=0x7f08000a;
+        public static final int commentListView=0x7f080008;
+        public static final int contentTextView=0x7f080006;
         public static final int idEditText=0x7f080001;
-        public static final int imageView1=0x7f080005;
+        public static final int imageView1=0x7f080009;
         public static final int loginButton=0x7f080003;
         public static final int passwordEditText=0x7f080002;
         public static final int talksroomListView=0x7f080000;
         public static final int timeTextView=0x7f080007;
-        public static final int titleTextView=0x7f080006;
+        public static final int titleTextView=0x7f080005;
         public static final int writeButton=0x7f080004;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int activity_talksroom=0x7f030001;
-        public static final int listview_talksroom=0x7f030002;
+        public static final int activity_talksroomdetail=0x7f030002;
+        public static final int listview_comment=0x7f030003;
+        public static final int listview_talksroom=0x7f030004;
     }
     public static final class menu {
         public static final int main=0x7f070000;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -142,9 +143,11 @@ public class TalksRoomActivity extends Activity {
 		
 		talksRoomListView.setOnItemClickListener(new OnItemClickListener(){
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+			public void onItemClick(AdapterView<?> arg0, View arg1, int index,
 					long arg3) {
-				
+				Intent intent = new Intent(TalksRoomActivity.this, TalksRoomDetailActivity.class);
+				intent.putExtra("post", posts.get(index).toString());
+				startActivity(intent);
 			}
 		});
 	}
