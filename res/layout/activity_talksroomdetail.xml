@@ -34,7 +34,7 @@
     	android:layout_height="wrap_content">
 
         <Button
-        	android:id="@+id/writeComment"
+        	android:id="@+id/writeCommentButton"
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
         	android:text="Button"/>

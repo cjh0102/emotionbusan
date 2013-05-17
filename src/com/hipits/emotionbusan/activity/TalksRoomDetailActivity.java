@@ -32,8 +32,6 @@ public class TalksRoomDetailActivity extends Activity {
 		setContentView(R.layout.activity_talksroomdetail);
 
 		comments = new ArrayList<BaasioEntity>();
-		adapter = new CommentListAdapter(this, comments);
-
 		Intent intent = getIntent();
 		String post = intent.getStringExtra("post");
 
@@ -54,9 +52,7 @@ public class TalksRoomDetailActivity extends Activity {
 			timeTextView.setText(createdTime);
 		}
 
-		ListView commentListView = (ListView) findViewById(R.id.commentListView);
-
-		findViewById(R.id.writeComment).setOnClickListener(
+		findViewById(R.id.writeCommentButton).setOnClickListener(
 				new OnClickListener() {
 					@Override
 					public void onClick(View arg0) {
@@ -74,13 +70,11 @@ public class TalksRoomDetailActivity extends Activity {
 	public void writeComment(String comment) {
 		BaasioEntity commentEntity = new BaasioEntity("comment");
 		commentEntity.setProperty("body", comment);
-
 		commentEntity.saveInBackground(new BaasioCallback<BaasioEntity>() {
 			@Override
 			public void onException(BaasioException arg0) {
 
 			}
-
 			@Override
 			public void onResponse(BaasioEntity response) {
 				postEntity.connectInBackground("write_comment", response,
@@ -90,13 +84,14 @@ public class TalksRoomDetailActivity extends Activity {
 					public void onException(BaasioException arg0) {
 
 					}
-
 					@Override
 					public void onResponse(BaasioEntity response) {
 						if (!ObjectUtils.isEmpty(response)) {
 							comments.add(0, response);
-							adapter.notifyDataSetChanged();
-						}
+                            ListView commentListView = (ListView) findViewById(R.id.commentListView);
+                            adapter = new CommentListAdapter(getBaseContext(), comments);
+                            commentListView.setAdapter(adapter);
+                        }
 					}
 				});
 			}

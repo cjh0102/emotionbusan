@@ -45,24 +45,24 @@ public class TalksRoomActivity extends Activity {
 
 		final LoginManger loginManger = LoginManger.getInstance(this);
 		final EditText idEditText = (EditText) findViewById(R.id.idEditText);
-		final EditText passwordEditText = (EditText) findViewById(R.id.passwordEditText);
+        final EditText passwordEditText = (EditText) findViewById(R.id.passwordEditText);
 
 		findViewById(R.id.loginButton).setOnClickListener(
-				new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						loginManger.signIn(idEditText.getText().toString()
-								.trim(), passwordEditText.getText().toString()
-								.trim());
+                new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        loginManger.signIn(idEditText.getText().toString()
+                                .trim(), passwordEditText.getText().toString()
+                                .trim());
 
-						if (loginManger.getIsLogin()) {
-							Toast.makeText(TalksRoomActivity.this, "로긴성공",
-									Toast.LENGTH_SHORT).show();
-							getEntities();
+                        if (loginManger.getIsLogin()) {
+                            Toast.makeText(TalksRoomActivity.this, "로긴성공",
+                                    Toast.LENGTH_SHORT).show();
+                            getEntities();
 
-						}
-					}
-				});
+                        }
+                    }
+                });
 
 		findViewById(R.id.writeButton).setOnClickListener(
 				new OnClickListener() {
@@ -75,15 +75,15 @@ public class TalksRoomActivity extends Activity {
 	}
 
 	public void writePost(String title, String body) {
-		
-		LoginManger.getInstance(this).signIn("oprt12@gmail.com", "1234");
-		
-		BaasioUser user = Baas.io().getSignedInUser();
 
-		BaasioEntity entity = new BaasioEntity(ENTITY_TYPE);
+		LoginManger.getInstance(this).signIn("oprt12@gmail.com", "1234");
+
+		BaasioUser user = Baas.io().getSignedInUser();
+        BaasioEntity entity = new BaasioEntity(ENTITY_TYPE);
 		entity.setProperty("writer_username", user.getUsername());
 		entity.setProperty("writer_uuid", user.getUuid().toString());
 		entity.setProperty("title", title);
+
 
 		if (!ObjectUtils.isEmpty(body)) {
 			entity.setProperty("body", body);

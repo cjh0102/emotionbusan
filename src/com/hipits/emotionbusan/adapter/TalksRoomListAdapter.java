@@ -56,8 +56,7 @@ public class TalksRoomListAdapter extends BaseAdapter {
 
 		BaasioEntity entity = entities.get(position);
 
-		TextView titleTextView = (TextView) view
-				.findViewById(R.id.titleTextView);
+		TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
 		TextView timeTextView = (TextView) view.findViewById(R.id.timeTextView);
 		
 		setStringToView(entity, titleTextView, "title");
