@@ -43,7 +43,6 @@ public class CommentListAdapter extends BaseAdapter {
 
     private void setStringToView(BaasioEntity entity, TextView view,
                                  String value) {
-        Log.e("String",EtcUtils.getStringFromEntity(entity, value));
         view.setText(EtcUtils.getStringFromEntity(entity, value));
     }
 
@@ -59,7 +58,7 @@ public class CommentListAdapter extends BaseAdapter {
         TextView bodyTextView = (TextView) view.findViewById(R.id.bodyTextView);
 
         setStringToView(comment, bodyTextView, "body");
-
-		return view;
+        
+        return view;
 	}
 }

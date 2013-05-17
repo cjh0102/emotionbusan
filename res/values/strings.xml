@@ -4,5 +4,7 @@
 	<string name="app_name">emotionbusan</string>
 	<string name="action_settings">Settings</string>
 	<string name="hello_world">Hello world!</string>
+	<string name="DUPLICATED_UNIQUE_PROPERTY_ERROR">아이디중복입니다</string>
+	<string name="NVALID_USERNAME_OR_PASSWORD_ERROR">잘못된id이거나 password입니다</string>
 
 </resources>
