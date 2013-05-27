@@ -83,7 +83,7 @@ public class TalksRoomActivity extends Activity {
 		entity.setProperty("writer_username", user.getUsername());
 		entity.setProperty("writer_uuid", user.getUuid().toString());
 		entity.setProperty("title", title);
-
+		entity.setProperty("commentCount", 0);
 
 		if (!ObjectUtils.isEmpty(body)) {
 			entity.setProperty("body", body);
