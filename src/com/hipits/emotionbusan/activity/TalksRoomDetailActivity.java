@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hipits.emotionbusan.R;
 import com.hipits.emotionbusan.adapter.CommentListAdapter;
@@ -21,7 +20,6 @@ import com.kth.baasio.callback.BaasioCallback;
 import com.kth.baasio.callback.BaasioQueryCallback;
 import com.kth.baasio.entity.BaasioBaseEntity;
 import com.kth.baasio.entity.entity.BaasioEntity;
-import com.kth.baasio.exception.BaasioError;
 import com.kth.baasio.exception.BaasioException;
 import com.kth.baasio.query.BaasioQuery;
 import com.kth.baasio.utils.JsonUtils;
@@ -46,7 +44,6 @@ public class TalksRoomDetailActivity extends Activity {
 			postEntity = JsonUtils.parse(post, BaasioEntity.class);
 		}
 		
-
 		TextView titleTextView = (TextView) findViewById(R.id.titleTextView);
 		TextView contentTextView = (TextView) findViewById(R.id.contentTextView);
 		TextView timeTextView = (TextView) findViewById(R.id.timeTextView);
@@ -76,6 +73,7 @@ public class TalksRoomDetailActivity extends Activity {
 
 	private void getCommentEntities() {
 		BaasioQuery query = new BaasioQuery();
+		
 		query.setType("comment");
 		query.setRelation(postEntity, "write_comment");
 		query.queryInBackground(new BaasioQueryCallback() {

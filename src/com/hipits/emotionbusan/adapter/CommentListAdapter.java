@@ -2,7 +2,6 @@ package com.hipits.emotionbusan.adapter;
 
 import java.util.List;
 
-import android.util.Log;
 import android.widget.TextView;
 import com.hipits.emotionbusan.R;
 import com.hipits.emotionbusan.baasio.EtcUtils;
@@ -56,8 +55,14 @@ public class CommentListAdapter extends BaseAdapter {
         BaasioEntity comment = comments.get(index);
 
         TextView bodyTextView = (TextView) view.findViewById(R.id.bodyTextView);
-
+        TextView timeTextView = (TextView) view.findViewById(R.id.timeTextView);
+      
         setStringToView(comment, bodyTextView, "body");
+        
+        if (comment.getCreated() != null) {
+        	String createdTime = EtcUtils.getDateString(comment.getCreated());
+			timeTextView.setText(createdTime);
+		}
         
         return view;
 	}
