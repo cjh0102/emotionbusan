@@ -72,12 +72,13 @@ public class TalksRoomDetailActivity extends Activity {
 	}
 
 	private void getCommentEntities() {
+		
 		BaasioQuery query = new BaasioQuery();
 		
 		query.setType("comment");
 		query.setRelation(postEntity, "write_comment");
+		
 		query.queryInBackground(new BaasioQueryCallback() {
-
 			@Override
 			public void onResponse(List<BaasioBaseEntity> entities,
 					List<Object> arg1, BaasioQuery arg2, long arg3) {
@@ -107,13 +108,14 @@ public class TalksRoomDetailActivity extends Activity {
 
 	public void writeComment(String comment) {
 
-		LoginManger.getInstance(this).signIn("oprt12@gmail.com", "1234");
+		LoginManger.getInstance(this).signIn("oprt12@gmail.com", "123456");
 
 		BaasioEntity commentEntity = new BaasioEntity("comment");
 		commentEntity.setProperty("body", comment);
 		commentEntity.saveInBackground(new BaasioCallback<BaasioEntity>() {
 			@Override
 			public void onException(BaasioException arg0) {
+				Log.e("exception", arg0.getMessage());
 
 			}
 
@@ -135,6 +137,21 @@ public class TalksRoomDetailActivity extends Activity {
 						}
 					}
 				});
+			}
+		});
+		
+		postEntity.setProperty("commentCount", comments.size() + 1);
+		
+		postEntity.updateInBackground(new BaasioCallback<BaasioEntity>() {
+			
+			@Override
+			public void onResponse(BaasioEntity entity) {
+				Log.d("junhwan", "성공");
+			}
+			
+			@Override
+			public void onException(BaasioException arg0) {
+				Log.d("junhwan", "실패");
 			}
 		});
 	}

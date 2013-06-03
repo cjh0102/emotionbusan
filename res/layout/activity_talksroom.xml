@@ -43,10 +43,10 @@
             android:text="글쓰기" />
 
         <Button
-            android:id="@+id/logOutButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="로그아웃" />
+        	android:id="@+id/logOutButton"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:text="로그아웃"/>
 
     </LinearLayout>
 
