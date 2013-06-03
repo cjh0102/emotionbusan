@@ -45,24 +45,16 @@ public class TalksRoomActivity extends Activity {
 
 		final LoginManger loginManger = LoginManger.getInstance(this);
 		final EditText idEditText = (EditText) findViewById(R.id.idEditText);
-        final EditText passwordEditText = (EditText) findViewById(R.id.passwordEditText);
+		final EditText passwordEditText = (EditText) findViewById(R.id.passwordEditText);
 
 		findViewById(R.id.loginButton).setOnClickListener(
-                new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        loginManger.signIn(idEditText.getText().toString()
-                                .trim(), passwordEditText.getText().toString()
-                                .trim());
-
-                        if (loginManger.getIsLogin()) {
-                            Toast.makeText(TalksRoomActivity.this, "로긴성공",
-                                    Toast.LENGTH_SHORT).show();
-                            getEntities();
-
-                        }
-                    }
-                });
+				new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						loginManger.signIn("oprt12@gmail.com", "123456");
+						getEntities();
+					}
+				});
 
 		findViewById(R.id.writeButton).setOnClickListener(
 				new OnClickListener() {
@@ -72,14 +64,21 @@ public class TalksRoomActivity extends Activity {
 
 					}
 				});
+
+		findViewById(R.id.logOutButton).setOnClickListener(
+				new OnClickListener() {
+					@Override
+					public void onClick(View arg0) {
+						LoginManger.getInstance(getApplicationContext())
+								.logOut();
+					}
+				});
 	}
 
 	public void writePost(String title, String body) {
 
-		LoginManger.getInstance(this).signIn("oprt12@gmail.com", "1234");
-
 		BaasioUser user = Baas.io().getSignedInUser();
-        BaasioEntity entity = new BaasioEntity(ENTITY_TYPE);
+		BaasioEntity entity = new BaasioEntity(ENTITY_TYPE);
 		entity.setProperty("writer_username", user.getUsername());
 		entity.setProperty("writer_uuid", user.getUuid().toString());
 		entity.setProperty("title", title);
@@ -88,7 +87,7 @@ public class TalksRoomActivity extends Activity {
 		if (!ObjectUtils.isEmpty(body)) {
 			entity.setProperty("body", body);
 		}
-		
+
 		entity.saveInBackground(new BaasioCallback<BaasioEntity>() {
 			@Override
 			public void onResponse(BaasioEntity response) {
@@ -97,7 +96,7 @@ public class TalksRoomActivity extends Activity {
 					adapter.notifyDataSetChanged();
 				}
 			}
-			
+
 			@Override
 			public void onException(BaasioException e) {
 			}
@@ -119,7 +118,7 @@ public class TalksRoomActivity extends Activity {
 				@Override
 				public void onResponse(List<BaasioBaseEntity> entities,
 						List<Object> list, BaasioQuery query, long timestamp) {
-					
+
 					posts = BaasioBaseEntity.toType(entities,
 							BaasioEntity.class);
 
@@ -140,12 +139,13 @@ public class TalksRoomActivity extends Activity {
 		talksRoomListView = (ListView) findViewById(R.id.talksroomListView);
 		adapter = new TalksRoomListAdapter(TalksRoomActivity.this, posts);
 		talksRoomListView.setAdapter(adapter);
-		
-		talksRoomListView.setOnItemClickListener(new OnItemClickListener(){
+
+		talksRoomListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int index,
 					long arg3) {
-				Intent intent = new Intent(TalksRoomActivity.this, TalksRoomDetailActivity.class);
+				Intent intent = new Intent(TalksRoomActivity.this,
+						TalksRoomDetailActivity.class);
 				intent.putExtra("post", posts.get(index).toString());
 				startActivity(intent);
 			}

@@ -37,13 +37,13 @@ public class LoginManger {
 							Toast.makeText(context,
 									R.string.DUPLICATED_UNIQUE_PROPERTY_ERROR,
 									Toast.LENGTH_SHORT).show();
-							setIsLogin(false);
-							return;
 						} else if (e.getErrorCode() == 201) {
 							Toast.makeText(context,
 									R.string.NVALID_USERNAME_OR_PASSWORD_ERROR,
 									Toast.LENGTH_SHORT).show();
 						}
+						setIsLogin(false);
+						return;
 					}
 
 					@Override
@@ -63,14 +63,20 @@ public class LoginManger {
 
 					@Override
 					public void onException(BaasioException e) {
-
+						Log.e("signException", e.getMessage());
 					}
 
 					@Override
 					public void onResponse(BaasioUser response) {
-
+						Log.e("test", "성공");
+						isLogin = true;
 					}
 				});
+	}
+
+	public void logOut() {
+		BaasioUser.signOut(context);
+		isLogin = false;
 	}
 
 	public Boolean getIsLogin() {

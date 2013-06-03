@@ -3,6 +3,7 @@ package com.hipits.emotionbusan.adapter;
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +59,9 @@ public class TalksRoomListAdapter extends BaseAdapter {
 
 		TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
 		TextView timeTextView = (TextView) view.findViewById(R.id.timeTextView);
+		TextView commentCountTextView = (TextView) view.findViewById(R.id.commentCountTextView);
 		
+		setStringToView(entity, commentCountTextView, "commentCount");
 		setStringToView(entity, titleTextView, "title");
 		
 		if (entity.getCreated() != null) {
