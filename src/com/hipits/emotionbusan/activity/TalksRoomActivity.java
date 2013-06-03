@@ -51,9 +51,11 @@ public class TalksRoomActivity extends Activity {
                 new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        loginManger.signIn(idEditText.getText().toString()
-                                .trim(), passwordEditText.getText().toString()
-                                .trim());
+//                        loginManger.signIn(idEditText.getText().toString()
+//                                .trim(), passwordEditText.getText().toString()
+//                                .trim());
+                    	
+                    	loginManger.signIn("oprt12@gmail.com", "gh842653");
 
                         if (loginManger.getIsLogin()) {
                             Toast.makeText(TalksRoomActivity.this, "로긴성공",
@@ -72,6 +74,14 @@ public class TalksRoomActivity extends Activity {
 
 					}
 				});
+		
+		findViewById(R.id.logOutButton).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				LoginManger.getInstance(getApplicationContext()).sintOut();
+			}
+		});
+		
 	}
 
 	public void writePost(String title, String body) {
