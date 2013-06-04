@@ -53,7 +53,7 @@ public class TalksRoomDetailActivity extends Activity {
 		getCommentEntities();
 		
 		setStringToView(postEntity, titleTextView, "title");
-		setStringToView(postEntity, contentTextView, "body");
+		setStringToView(postEntity, contentTextView, "body");	
 
 		if (postEntity.getCreated() != null) {
 			String createdTime = EtcUtils

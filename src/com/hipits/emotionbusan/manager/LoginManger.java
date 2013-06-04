@@ -74,6 +74,11 @@ public class LoginManger {
 					}
 				});
 	}
+	
+	public void sintOut() {
+		BaasioUser.signOut(context);
+		isLogin = false;
+	}
 
 	public void logOut() {
 		BaasioUser.signOut(context);
