@@ -64,12 +64,13 @@ public class LoginManger {
 					@Override
 					public void onException(BaasioException e) {
 						Log.e("signException", e.getMessage());
+						setIsLogin(false);
 					}
 
 					@Override
 					public void onResponse(BaasioUser response) {
 						Log.e("test", "성공");
-						isLogin = true;
+						setIsLogin(true);
 					}
 				});
 	}

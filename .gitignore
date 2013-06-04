@@ -21,3 +21,4 @@ local.properties
 .idea/vcs.xml
 .idea/workspace.xml
 emotionbusan.iml
+.settings/org.eclipse.jdt.core.prefs

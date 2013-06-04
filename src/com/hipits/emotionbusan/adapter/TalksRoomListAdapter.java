@@ -61,7 +61,7 @@ public class TalksRoomListAdapter extends BaseAdapter {
 		TextView timeTextView = (TextView) view.findViewById(R.id.timeTextView);
 		TextView commentCountTextView = (TextView) view.findViewById(R.id.commentCountTextView);
 		
-		setStringToView(entity, commentCountTextView, "commentCount");
+		commentCountTextView.setText("" + EtcUtils.getIntFromEntity(entity, "commentCount", 15));
 		setStringToView(entity, titleTextView, "title");
 		
 		if (entity.getCreated() != null) {
