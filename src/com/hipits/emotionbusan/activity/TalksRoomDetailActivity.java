@@ -141,7 +141,6 @@ public class TalksRoomDetailActivity extends Activity {
 		});
 		
 		postEntity.setProperty("commentCount", comments.size() + 1);
-		
 		postEntity.updateInBackground(new BaasioCallback<BaasioEntity>() {
 			
 			@Override

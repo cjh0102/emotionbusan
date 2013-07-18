@@ -6,6 +6,7 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -35,6 +36,7 @@ public class TalksRoomActivity extends Activity {
 	private List<BaasioEntity> posts;
 	private TalksRoomListAdapter adapter;
 	private ListView talksRoomListView;
+	private List<BaasioEntity> comments;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,35 @@ public class TalksRoomActivity extends Activity {
 				});
 	}
 
+	private void deletePost(final int position) {
+
+		if (ObjectUtils.isEmpty(Baas.io().getSignedInUser())) {
+			Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+			return;
+		}
+
+		BaasioEntity post = posts.get(position);
+
+		post.deleteInBackground(new BaasioCallback<BaasioEntity>() {
+
+			@Override
+			public void onResponse(BaasioEntity entity) {
+				
+				if (!ObjectUtils.isEmpty(entity)) {
+					Toast.makeText(TalksRoomActivity.this, "삭제성공",
+							Toast.LENGTH_SHORT).show();
+					posts.remove(position);
+					adapter.notifyDataSetChanged();
+				}
+			}
+
+			@Override
+			public void onException(BaasioException arg0) {
+				Log.e("지움", arg0.getMessage());
+			}
+		});
+	}
+
 	public void writePost(String title, String body) {
 
 		BaasioUser user = Baas.io().getSignedInUser();
@@ -106,7 +137,8 @@ public class TalksRoomActivity extends Activity {
 	private void getEntities() {
 
 		posts = new ArrayList<BaasioEntity>();
-
+		comments = new ArrayList<BaasioEntity>();
+		
 		if (ObjectUtils.isEmpty(query)) {
 
 			query = new BaasioQuery();
@@ -134,6 +166,44 @@ public class TalksRoomActivity extends Activity {
 			});
 		}
 	}
+	
+	private void deleteComments(BaasioEntity post) {
+		
+		BaasioQuery query = new BaasioQuery();
+		query.setType("comment");
+		query.setRelation(post, "write_comment");
+		query.queryInBackground(new BaasioQueryCallback() {
+			
+			@Override
+			public void onResponse(List<BaasioBaseEntity> entities, List<Object> arg1,
+					BaasioQuery arg2, long arg3) {
+				comments = BaasioEntity.toType(entities, BaasioEntity.class);
+				
+				for (BaasioEntity comment : comments) {
+		
+					comment.deleteInBackground(new BaasioCallback<BaasioEntity>() {
+						
+						@Override
+						public void onResponse(BaasioEntity arg0) {
+							comments.remove(arg0);
+							
+						}
+						
+						@Override
+						public void onException(BaasioException arg0) {
+							
+						}
+					});
+				}
+			}
+			
+			@Override
+			public void onException(BaasioException arg0) {
+				
+			}
+		});
+		
+	}
 
 	public void displayList() {
 		talksRoomListView = (ListView) findViewById(R.id.talksroomListView);
@@ -148,6 +218,15 @@ public class TalksRoomActivity extends Activity {
 						TalksRoomDetailActivity.class);
 				intent.putExtra("post", posts.get(index).toString());
 				startActivity(intent);
+			}
+		});
+		
+		talksRoomListView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+					long arg3) {
+				deletePost(position);
+				
 			}
 		});
 	}
