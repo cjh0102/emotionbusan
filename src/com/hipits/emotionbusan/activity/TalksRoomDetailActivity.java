@@ -30,6 +30,13 @@ public class TalksRoomDetailActivity extends Activity {
 	private BaasioEntity postEntity;
 	private List<BaasioEntity> comments;
 	private CommentListAdapter adapter;
+	
+	@Override
+	public void onBackPressed() {
+		Intent intent = new Intent(this, TalksRoomActivity.class);
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(intent);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

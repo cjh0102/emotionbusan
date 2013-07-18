@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -37,6 +38,30 @@ public class TalksRoomActivity extends Activity {
 	private TalksRoomListAdapter adapter;
 	private ListView talksRoomListView;
 	private List<BaasioEntity> comments;
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		Log.e("onResume", "onResume");
+	}
+	
+	@Override
+	protected void onPause() {
+		Log.e("pause", "pause");
+		super.onPause();
+	}
+	
+	@Override
+	protected void onStop() {
+		Log.e("onStop", "onStop");
+		super.onStop();
+	}
+	
+	@Override
+	protected void onDestroy() {
+		Log.e("onDestroy", "onDestroy");
+		super.onDestroy();
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +110,11 @@ public class TalksRoomActivity extends Activity {
 		}
 
 		BaasioEntity post = posts.get(position);
+		
+		if (!ObjectUtils.isEmpty(post)) {
+			deleteComments(post);
+		}
+		
 
 		post.deleteInBackground(new BaasioCallback<BaasioEntity>() {
 
@@ -101,7 +131,7 @@ public class TalksRoomActivity extends Activity {
 
 			@Override
 			public void onException(BaasioException arg0) {
-				Log.e("지움", arg0.getMessage());
+				Log.e("삭제실패", arg0.getMessage());
 			}
 		});
 	}
@@ -177,7 +207,12 @@ public class TalksRoomActivity extends Activity {
 			@Override
 			public void onResponse(List<BaasioBaseEntity> entities, List<Object> arg1,
 					BaasioQuery arg2, long arg3) {
+			
 				comments = BaasioEntity.toType(entities, BaasioEntity.class);
+				
+				if (comments.isEmpty()) {
+					return;
+				}
 				
 				for (BaasioEntity comment : comments) {
 		
@@ -206,6 +241,7 @@ public class TalksRoomActivity extends Activity {
 	}
 
 	public void displayList() {
+		
 		talksRoomListView = (ListView) findViewById(R.id.talksroomListView);
 		adapter = new TalksRoomListAdapter(TalksRoomActivity.this, posts);
 		talksRoomListView.setAdapter(adapter);
@@ -221,13 +257,15 @@ public class TalksRoomActivity extends Activity {
 			}
 		});
 		
-		talksRoomListView.setOnItemClickListener(new OnItemClickListener() {
+		talksRoomListView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-					long arg3) {
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					int position, long arg3) {
 				deletePost(position);
-				
+				return false;
 			}
 		});
+		
 	}
 }
