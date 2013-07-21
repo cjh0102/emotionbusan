@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:weightSum="1" >
+
+    <ImageView
+        android:id="@+id/cafeImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="0px"
+        android:layout_weight="0.4"
+        android:onClick="onClick"
+        android:src="@drawable/baasio_logo" />
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="1"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:weightSum="1"
+                android:layout_height="0px"
+                android:layout_weight="0.1" >
+
+                <EditText
+                    android:id="@+id/cafeNameEditText"
+                    android:maxLines="1"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0.5"
+                    android:ems="10"
+                    android:hint="Cafe Name?" >
+
+                    <requestFocus />
+                </EditText>
+
+                <Spinner
+                    android:id="@+id/categorySpinner"
+                    android:layout_width="0px"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                     />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/urlEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.44"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                android:maxLines="5" />
+            <requestFocus />
+        </LinearLayout>
+    </ScrollView>
+   
+</LinearLayout>
