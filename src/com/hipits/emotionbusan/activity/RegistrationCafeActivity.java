@@ -16,46 +16,117 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.hipits.emotionbusan.R;
+import com.hipits.emotionbusan.manager.FileManager;
+import com.hipits.emotionbusan.manager.LoginManger;
+import com.hipits.emotionbusan.model.Cafe;
+import com.kth.baasio.Baas;
+import com.kth.baasio.callback.BaasioCallback;
+import com.kth.baasio.entity.entity.BaasioEntity;
+import com.kth.baasio.entity.user.BaasioUser;
+import com.kth.baasio.exception.BaasioException;
+import com.kth.baasio.utils.ObjectUtils;
 
 public class RegistrationCafeActivity extends Activity {
 
 	private String[] menus;
 
 	private static final int PICK_FROM_CAMERA = 0;
-	private static final int PICK_FROM_ALBUM = 1;
-	private static final int CROP_FROM_CAMERA = 2;
-
-	private Uri imageUri;
+	private static final int PICK_FROM_CROP = 1;
+	private static final String ENTITY_TYPE = "cafe";
+	
+	private Uri imageUri = null;
 	private ImageView cafeImageView;
+	private Spinner categorySpinner;
+	private EditText contentEditText;
+	
+	@Override
+	public void onBackPressed() {
+		deleteImageFile();
+		super.onBackPressed();
+	}
+	
+	@Override
+	protected void onDestroy() {
+		deleteImageFile();
+		super.onDestroy();
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_registrationcafe);
-
-		cafeImageView = (ImageView) findViewById(R.id.cafeImageView);
+		
+		initId();
 
 		menus = new String[] { "사진 찰영하기", "앨범에서 선택하기", "취소" };
 
+	}
+	
+	private void initId() {
+		
+		cafeImageView = (ImageView) findViewById(R.id.cafeImageView);
+		categorySpinner = (Spinner) findViewById(R.id.categorySpinner);
+		contentEditText = (EditText) findViewById(R.id.contentEditText);
 	}
 
 	public void onClick(View view) {
 		int id = view.getId();
 
-		if (id == R.id.cafeImageView) {
+		if (id == R.id.imageRegisterButton) {
 			showMenu();
+		} else if (id == R.id.registerCafeButton) {
+			registerCafe();
 		}
 
+	}
+	
+	public void registerCafe() {
+		
+		BaasioUser user = Baas.io().getSignedInUser();
+		
+		if (ObjectUtils.isEmpty(user)) {
+			Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
+		LoginManger.getInstance(this).signIn("junhwan", "123456");
+		
+		BaasioEntity cafe = new BaasioEntity(ENTITY_TYPE);
+		cafe.setProperty("writer_username", user.getUsername());
+		cafe.setProperty("cafeName", "카페이름");
+		cafe.setProperty("cafeAddress", "카페주소");
+		cafe.setProperty("content", "이 카페 맛있음요.");
+		cafe.setProperty("cafeURL", "카페 네이버 주소");
+		cafe.setProperty("favoritesCount", 1);
+		cafe.setProperty("category", "서면");
+		
+		
+		cafe.saveInBackground(new BaasioCallback<BaasioEntity>() {
+			@Override
+			public void onResponse(BaasioEntity entity) {
+				if (entity != null) {
+					FileManager.getInstance().upLoadFile(imageUri.getPath(), entity);
+				}
+			}
+			
+			@Override
+			public void onException(BaasioException exception) {
+				Log.e("RegisterException", exception.getMessage());
+			}
+		});
+		
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 		if (resultCode != RESULT_OK) {
-			Log.e("Result Fail", "no");
 			return;
 		}
 
@@ -71,39 +142,17 @@ public class RegistrationCafeActivity extends Activity {
 
 			intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
 
-			startActivityForResult(intent, CROP_FROM_CAMERA);
+			startActivityForResult(intent, PICK_FROM_CROP);
 
 			break;
 
-		case CROP_FROM_CAMERA:
-
-			Bitmap bitmap = BitmapFactory.decodeFile(imageUri.getPath());
-
-			cafeImageView.setImageBitmap(bitmap);
-
-			File file = new File(imageUri.getPath());
-
-			if (file.exists()) {
-				file.delete();
-			}
-
-			break;
-
-		case PICK_FROM_ALBUM:
-
-			String filePath = Environment.getExternalStorageDirectory()
-					+ "/temp.jpg";
-			Bitmap selectedBitmap = BitmapFactory.decodeFile(filePath);
+		case PICK_FROM_CROP:
+			
+			
+			Bitmap selectedBitmap = BitmapFactory.decodeFile(imageUri.getPath());
 
 			cafeImageView.setImageBitmap(selectedBitmap);
 			
-			File file2 = new File(filePath);
-
-			if (file2.exists()) {
-				file2.delete();
-			}
-
-
 			break;
 		}
 
@@ -111,7 +160,7 @@ public class RegistrationCafeActivity extends Activity {
 
 	public void pickFromCamera() {
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		String url = "tmp_" + String.valueOf(System.currentTimeMillis())
+		String url = "Cam_" + String.valueOf(System.currentTimeMillis())
 				+ ".jpg";
 
 		imageUri = Uri.fromFile(new File(Environment
@@ -126,9 +175,11 @@ public class RegistrationCafeActivity extends Activity {
 				MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 		intent.setType("image/*");
 		intent.putExtra("crop", "true");
-
-		File file = new File(Environment.getExternalStorageDirectory(),
-				"temp.jpg");
+		
+		String fileName = "Album_" + String.valueOf(System.currentTimeMillis())
+				+ ".jpg";
+		
+		File file = new File(Environment.getExternalStorageDirectory(), fileName);
 
 		if (!file.exists()) {
 			try {
@@ -137,11 +188,13 @@ public class RegistrationCafeActivity extends Activity {
 				Log.e("fileException", e.getMessage());
 			}
 		}
+		
+		imageUri = Uri.fromFile(file);
 
-		intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
 		intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
 
-		startActivityForResult(intent, PICK_FROM_ALBUM);
+		startActivityForResult(intent, PICK_FROM_CROP);
 	}
 
 	public void showMenu() {
@@ -153,7 +206,7 @@ public class RegistrationCafeActivity extends Activity {
 			public void onClick(DialogInterface dialog, int position) {
 				if (position == PICK_FROM_CAMERA) {
 					pickFromCamera();
-				} else if (position == PICK_FROM_ALBUM) {
+				} else if (position == PICK_FROM_CROP) {
 					pickFromAlbum();
 				}
 
@@ -163,5 +216,16 @@ public class RegistrationCafeActivity extends Activity {
 		builder.setCancelable(true);
 		builder.create().show();
 	}
-
+	
+	public void deleteImageFile() {
+		
+		if (imageUri == null) {
+			return;
+		}
+		
+		File imageFile = new File(imageUri.getPath());
+		if (imageFile.exists()) {
+			imageFile.delete();
+		}
+	}
 }

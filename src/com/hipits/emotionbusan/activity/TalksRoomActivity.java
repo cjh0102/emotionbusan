@@ -40,30 +40,6 @@ public class TalksRoomActivity extends Activity {
 	private List<BaasioEntity> comments;
 	
 	@Override
-	protected void onResume() {
-		super.onResume();
-		Log.e("onResume", "onResume");
-	}
-	
-	@Override
-	protected void onPause() {
-		Log.e("pause", "pause");
-		super.onPause();
-	}
-	
-	@Override
-	protected void onStop() {
-		Log.e("onStop", "onStop");
-		super.onStop();
-	}
-	
-	@Override
-	protected void onDestroy() {
-		Log.e("onDestroy", "onDestroy");
-		super.onDestroy();
-	}
-
-	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_talksroom);
@@ -137,9 +113,15 @@ public class TalksRoomActivity extends Activity {
 	}
 
 	public void writePost(String title, String body) {
+		
+		if (ObjectUtils.isEmpty(Baas.io().getSignedInUser())) {
+			Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+			return;
+		}
 
 		BaasioUser user = Baas.io().getSignedInUser();
 		BaasioEntity entity = new BaasioEntity(ENTITY_TYPE);
+		
 		entity.setProperty("writer_username", user.getUsername());
 		entity.setProperty("writer_uuid", user.getUuid().toString());
 		entity.setProperty("title", title);
@@ -198,6 +180,11 @@ public class TalksRoomActivity extends Activity {
 	}
 	
 	private void deleteComments(BaasioEntity post) {
+		
+		if (ObjectUtils.isEmpty(Baas.io().getSignedInUser())) {
+			Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+			return;
+		}
 		
 		BaasioQuery query = new BaasioQuery();
 		query.setType("comment");

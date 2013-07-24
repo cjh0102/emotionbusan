@@ -6,13 +6,36 @@
     android:orientation="vertical"
     android:weightSum="1" >
 
-    <ImageView
-        android:id="@+id/cafeImageView"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="0px"
-        android:layout_weight="0.4"
+        android:weightSum="1"
+        android:layout_weight="0.61" >
+
+        <ImageView
+            android:id="@+id/cafeImageView"
+            android:layout_width="0px"
+            android:layout_weight="0.4"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baasio_logo" />
+
+        <Button
+            android:id="@+id/imageRegisterButton"
+            android:onClick="onClick"
+            android:layout_gravity="center_vertical"
+            android:layout_width="0px"
+            android:layout_weight="0.6"
+            android:layout_height="wrap_content"
+            android:text="이미지 등록하기" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/urlRegisterButton"
         android:onClick="onClick"
-        android:src="@drawable/baasio_logo" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="URL주소 등록하기" />
 
     <ScrollView
         android:id="@+id/scrollView1"
@@ -27,23 +50,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:weightSum="1"
-                android:layout_height="0px"
-                android:layout_weight="0.1" >
-
-                <EditText
-                    android:id="@+id/cafeNameEditText"
-                    android:maxLines="1"
-                    android:layout_width="0px"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="0.5"
-                    android:ems="10"
-                    android:hint="Cafe Name?" >
-
-                    <requestFocus />
-                </EditText>
-
+                android:layout_height="wrap_content"
+                android:weightSum="1" >
                 <Spinner
                     android:id="@+id/categorySpinner"
                     android:layout_width="0px"
@@ -53,15 +61,45 @@
             </LinearLayout>
 
             <EditText
-                android:id="@+id/urlEditText"
+                android:id="@+id/contentEditText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.44"
+                android:layout_height="131dp"
                 android:ems="10"
                 android:inputType="textMultiLine"
                 android:maxLines="5" />
             <requestFocus />
         </LinearLayout>
     </ScrollView>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:text="0"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:weightSum="1"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/cancleButton"
+            android:onClick="onClick"
+            android:layout_width="0px"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:text="등록 취소" />
+
+        <Button
+            android:id="@+id/registerCafeButton"
+            android:onClick="onClick"
+            android:layout_width="0px"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:text="게시글 등록" />
+
+    </LinearLayout>
    
 </LinearLayout>

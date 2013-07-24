@@ -69,12 +69,11 @@ public class LoginManger {
 
 					@Override
 					public void onResponse(BaasioUser response) {
-						Log.e("test", "성공");
 						setIsLogin(true);
 					}
 				});
 	}
-	
+
 	public void sintOut() {
 		BaasioUser.signOut(context);
 		isLogin = false;
