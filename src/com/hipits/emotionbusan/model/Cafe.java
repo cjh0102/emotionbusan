@@ -76,5 +76,4 @@ public class Cafe {
 	public void setWriterUsername(String writerUsername) {
 		this.writerUsername = writerUsername;
 	}
-
 }

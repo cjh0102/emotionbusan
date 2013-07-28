@@ -38,6 +38,7 @@
             android:configChanges="orientation|keyboardHidden|keyboard"
             >
         </activity>
+        <activity android:name=".activity.CafeDetailActivity"></activity>
     </application>
 
 </manifest>
