@@ -35,7 +35,7 @@
             android:name=".activity.RegistrationCafeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan" 
-            android:configChanges="orientation|keyboardHidden|keyboard"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize"
             >
         </activity>
         <activity android:name=".activity.CafeDetailActivity"></activity>

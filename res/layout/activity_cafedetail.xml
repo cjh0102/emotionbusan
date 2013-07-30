@@ -12,7 +12,7 @@
         android:layout_weight="0.23" >
 
         <ImageView
-            android:id="@+id/imageView1"
+            android:id="@+id/cafeImageView"
             android:layout_width="0px"
             android:layout_weight="0.4"
             android:layout_height="wrap_content"

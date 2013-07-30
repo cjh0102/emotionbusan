@@ -55,6 +55,9 @@ public class MainActivity extends Activity {
 
 			intent.putExtra("cafe", cafe.toString());
 
+		} else if (id == R.id.loginButton) {
+			LoginManger.getInstance(this).signIn("junhwan", "123456");
+			return;
 		}
 
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
