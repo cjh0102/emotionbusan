@@ -9,12 +9,13 @@
         android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".baasio.BaasioApplication"
         android:allowBackup="true"
-       	android:configChanges="orientation|keyboardHidden|keyboard"
+        android:configChanges="orientation|keyboardHidden|keyboard"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
@@ -33,12 +34,20 @@
         </activity>
         <activity
             android:name=".activity.RegistrationCafeActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" 
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize"
-            >
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan" >
         </activity>
-        <activity android:name=".activity.CafeDetailActivity"></activity>
+        <activity android:name=".activity.CafeDetailActivity" >
+        </activity>
+        
+         <activity android:name="eu.janmuller.android.simplecropimage.CropImage" />
+
+        <provider
+            android:name="InternalStorageContentProvider"
+            android:authorities="com.hipits.emotionbusan"
+            android:exported="true" >
+        </provider>
     </application>
 
 </manifest>

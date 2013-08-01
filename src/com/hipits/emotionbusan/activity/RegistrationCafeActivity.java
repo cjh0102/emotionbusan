@@ -1,10 +1,16 @@
 package com.hipits.emotionbusan.activity;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -19,9 +25,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.hipits.emotionbusan.InternalStorageContentProvider;
 import com.hipits.emotionbusan.R;
 import com.hipits.emotionbusan.manager.FileManager;
 import com.hipits.emotionbusan.manager.LoginManger;
@@ -33,19 +39,26 @@ import com.kth.baasio.entity.user.BaasioUser;
 import com.kth.baasio.exception.BaasioException;
 import com.kth.baasio.utils.ObjectUtils;
 
-public class RegistrationCafeActivity extends Activity {
+import eu.janmuller.android.simplecropimage.CropImage;
 
-	private static final int PICK_FROM_CAMERA = 0;
-	private static final int PICK_FROM_CROP = 1;
+public class RegistrationCafeActivity extends Activity {
+	
+	public static final String TAG = "RegistrationCafeActivity";
+
+	public static String TEMP_PHOTO_FILE_NAME = null;
 	private static final String ENTITY_TYPE = "cafe";
 
-	private Uri imageUri = null;
-	private ImageView cafeImageView;
+	public static final int REQUEST_CODE_GALLERY = 1;
+	public static final int REQUEST_CODE_TAKE_PICTURE = 0;
+	public static final int REQUEST_CODE_CROP_IMAGE = 2;
 
+	private ImageView cafeImageView;
+	private File imageFile;
 	private Button categoryButton;
 	private EditText contentEditText;
 	private EditText cafeNameEditText;
 	private EditText cafeAddressEditText;
+	private List<File> imageFiles;
 
 	private Cafe cafe;
 
@@ -66,11 +79,11 @@ public class RegistrationCafeActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_registrationcafe);
 
-		initId();
+		init();
 
 	}
 
-	private void initId() {
+	private void init() {
 
 		cafeImageView = (ImageView) findViewById(R.id.cafeImageView);
 		categoryButton = (Button) findViewById(R.id.categoryButton);
@@ -79,6 +92,9 @@ public class RegistrationCafeActivity extends Activity {
 		cafeAddressEditText = (EditText) findViewById(R.id.cafeAddressEditText);
 
 		cafe = new Cafe();
+		
+		imageFiles = new ArrayList<File>();
+
 	}
 
 	public void onClick(View view) {
@@ -102,10 +118,10 @@ public class RegistrationCafeActivity extends Activity {
 	public void registerCafe() {
 
 		BaasioUser user = Baas.io().getSignedInUser();
-		
-		if (imageUri == null) {
-			Toast.makeText(RegistrationCafeActivity.this,
-					"이미지를 등록해주세요!", Toast.LENGTH_SHORT).show();
+
+		if (!imageFile.exists()) {
+			Toast.makeText(RegistrationCafeActivity.this, "이미지를 등록해주세요!",
+					Toast.LENGTH_SHORT).show();
 			return;
 		}
 
@@ -143,8 +159,8 @@ public class RegistrationCafeActivity extends Activity {
 			@Override
 			public void onResponse(BaasioEntity entity) {
 				if (entity != null) {
-					FileManager.getInstance().upLoadFile(imageUri.getPath(),
-							entity);
+//					FileManager.getInstance().upLoadFile(imageUri.getPath(),
+//							entity);
 				}
 			}
 
@@ -160,77 +176,66 @@ public class RegistrationCafeActivity extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 		if (resultCode != RESULT_OK) {
+			Log.e("Result_Error", "ResultCodeError");
 			return;
 		}
-
-		switch (requestCode) {
-
-		case PICK_FROM_CAMERA:
-			
-			Intent intent = new Intent("com.android.camera.action.CROP");
-			intent.setDataAndType(imageUri, "image/*");
-
-			intent.putExtra("aspectx", 1);
-			intent.putExtra("aspecty", 1);
-
-			intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-
-			startActivityForResult(intent, PICK_FROM_CROP);
-
-			break;
-
-		case PICK_FROM_CROP:
-
-			Log.e("crop", imageUri.getPath());
-			
-			Bitmap selectedBitmap = BitmapFactory.decodeFile(imageUri.getPath());
-
-			cafeImageView.setImageBitmap(selectedBitmap);
-
-			break;
-		}
-
-	}
-
-	public void pickFromCamera() {
-		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		String url = "Cam_" + String.valueOf(System.currentTimeMillis())
-				+ ".jpg";
-
-		imageUri = Uri.fromFile(new File(Environment
-				.getExternalStorageDirectory(), url));
 		
-		intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-		startActivityForResult(intent, PICK_FROM_CAMERA);
-	}
+		Bitmap bitmap;
+		
+		switch (requestCode) {
+		
+		case REQUEST_CODE_TAKE_PICTURE:
+			
+			Intent intent = new Intent(this, CropImage.class);
+	        intent.putExtra(CropImage.IMAGE_PATH, imageFile.getPath());
+	        intent.putExtra(CropImage.SCALE, true);
+	        intent.putExtra(CropImage.ASPECT_X, 3);
+	        intent.putExtra(CropImage.ASPECT_Y, 2);
+	        
+	        startActivityForResult(intent, REQUEST_CODE_CROP_IMAGE);
 
-	public void pickFromAlbum() {
+			break;
 
-		Intent intent = new Intent(Intent.ACTION_GET_CONTENT,
-				MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-		intent.setType("image/*");
-		intent.putExtra("crop", "true");
+        case REQUEST_CODE_GALLERY:
 
-		String fileName = "Album_" + String.valueOf(System.currentTimeMillis())
-				+ ".jpg";
+            try {
+            	
+            	TEMP_PHOTO_FILE_NAME = "Album_" + String.valueOf(System.currentTimeMillis())
+        				+ ".jpg";
 
-		File file = new File(Environment.getExternalStorageDirectory(),
-				fileName);
+        		imageFile = new File(Environment.getExternalStorageDirectory(), TEMP_PHOTO_FILE_NAME);
+            	
+                InputStream inputStream = getContentResolver().openInputStream(data.getData());
+                FileOutputStream fileOutputStream = new FileOutputStream(imageFile);
+                copyStream(inputStream, fileOutputStream);
+                fileOutputStream.close();
+                inputStream.close();
 
-		if (!file.exists()) {
-			try {
-				file.createNewFile();
-			} catch (IOException e) {
-				Log.e("fileException", e.getMessage());
-			}
+                startCropImage();
+
+            } catch (Exception e) {
+
+                Log.e(TAG, "Error while creating temp file", e);
+            }
+
+            break;
+		
+		case REQUEST_CODE_CROP_IMAGE:
+			
+			  String path = data.getStringExtra(CropImage.IMAGE_PATH);
+              if (path == null) {
+
+                  return;
+              }
+
+              bitmap = BitmapFactory.decodeFile(imageFile.getPath());
+              cafeImageView.setImageBitmap(bitmap);
+              
+              imageFiles.add(imageFile);
+              
+              break;
 		}
-
-		imageUri = Uri.fromFile(file);
-
-		intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-		intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-
-		startActivityForResult(intent, PICK_FROM_CROP);
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	public void showMenu() {
@@ -242,10 +247,11 @@ public class RegistrationCafeActivity extends Activity {
 		builder.setItems(menus, new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int position) {
-				if (position == PICK_FROM_CAMERA) {
-					pickFromCamera();
-				} else if (position == PICK_FROM_CROP) {
-					pickFromAlbum();
+				if (position == REQUEST_CODE_TAKE_PICTURE) {
+					takePicture();
+					
+				} else if (position == REQUEST_CODE_GALLERY) {
+					openGallery();
 				}
 
 			}
@@ -273,15 +279,70 @@ public class RegistrationCafeActivity extends Activity {
 		builder.create().show();
 	}
 
+	private void takePicture() {
+
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+		try {
+			Uri mImageCaptureUri = null;
+			String state = Environment.getExternalStorageState();
+			if (Environment.MEDIA_MOUNTED.equals(state)) {
+				
+				TEMP_PHOTO_FILE_NAME = "Cam_" + String.valueOf(System.currentTimeMillis())
+						+ ".jpg";
+				
+				imageFile = new File(Environment.getExternalStorageDirectory(), TEMP_PHOTO_FILE_NAME);
+				
+				mImageCaptureUri = Uri.fromFile(imageFile);
+			} else {
+				/*
+				 * The solution is taken from here:
+				 * http://stackoverflow.com/questions
+				 * /10042695/how-to-get-camera-result-as-a-uri-in-data-folder
+				 */
+				mImageCaptureUri = InternalStorageContentProvider.CONTENT_URI;
+			}
+			intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
+					mImageCaptureUri);
+			intent.putExtra("return-data", true);
+			startActivityForResult(intent, REQUEST_CODE_TAKE_PICTURE);
+		} catch (ActivityNotFoundException e) {
+
+			Log.d(TAG, "cannot take picture", e);
+		}
+	}
+	
+	 private void openGallery() {
+	        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+	        photoPickerIntent.setType("image/*");
+	        startActivityForResult(photoPickerIntent, REQUEST_CODE_GALLERY);
+	    }
+	 
+	 public static void copyStream(InputStream input, OutputStream output)
+	            throws IOException {
+
+	        byte[] buffer = new byte[1024];
+	        int bytesRead;
+	        while ((bytesRead = input.read(buffer)) != -1) {
+	            output.write(buffer, 0, bytesRead);
+	        }
+	    }
+	 private void startCropImage() {
+
+	        Intent intent = new Intent(this, CropImage.class);
+	        intent.putExtra(CropImage.IMAGE_PATH, imageFile.getPath());
+	        intent.putExtra(CropImage.SCALE, true);
+
+	        intent.putExtra(CropImage.ASPECT_X, 3);
+	        intent.putExtra(CropImage.ASPECT_Y, 2);
+
+	        startActivityForResult(intent, REQUEST_CODE_CROP_IMAGE);
+	    }
+
 	public void deleteImageFile() {
-
-		if (imageUri == null) {
-			return;
+		for (File file : imageFiles) {
+			file.delete();
 		}
-
-		File imageFile = new File(imageUri.getPath());
-		if (imageFile.exists()) {
-			imageFile.delete();
-		}
+		imageFiles.clear();
 	}
 }
