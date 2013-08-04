@@ -25,6 +25,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.hipits.emotionbusan.InternalStorageContentProvider;
@@ -54,7 +55,7 @@ public class RegistrationCafeActivity extends Activity {
 
 	private ImageView cafeImageView;
 	private File imageFile;
-	private Button categoryButton;
+	private LinearLayout categoryButton;
 	private EditText contentEditText;
 	private EditText cafeNameEditText;
 	private EditText cafeAddressEditText;
@@ -86,7 +87,7 @@ public class RegistrationCafeActivity extends Activity {
 	private void init() {
 
 		cafeImageView = (ImageView) findViewById(R.id.cafeImageView);
-		categoryButton = (Button) findViewById(R.id.categoryButton);
+		categoryButton = (LinearLayout) findViewById(R.id.categoryButton);
 		contentEditText = (EditText) findViewById(R.id.contentEditText);
 		cafeNameEditText = (EditText) findViewById(R.id.cafeNameEditText);
 		cafeAddressEditText = (EditText) findViewById(R.id.cafeAddressEditText);
