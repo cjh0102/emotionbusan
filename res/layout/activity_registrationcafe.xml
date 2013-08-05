@@ -18,18 +18,76 @@
             android:id="@+id/logoImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/top_logo" />
+            android:clickable="true"
+            android:src="@drawable/btn_toplogo_selector" />
     </LinearLayout>
 
     <View
         android:layout_width="fill_parent"
         android:layout_height="0px"
-        android:layout_weight="0.015" />
+        android:layout_weight="0.02" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0px"
-        android:layout_weight="0.75"
+        android:layout_weight="0.2"
+        android:weightSum="1" >
+
+        <View
+            android:layout_width="0px"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.03" />
+
+        <ImageView
+            android:id="@+id/cafeImageView"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            android:src="@drawable/camera_bg" />
+
+        <View
+            android:layout_width="0px"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.03" />
+
+        <LinearLayout
+            android:layout_width="0px"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:orientation="vertical"
+            android:weightSum="1" >
+
+            <Button
+                android:id="@+id/imageRegisterButton"
+                android:layout_width="wrap_content"
+                android:layout_height="0px"
+                android:layout_weight="0.45"
+                android:background="@drawable/btn_imageregister_selector"
+                android:onClick="onClick"
+                android:text="이미지 등록하기"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="0px"
+                android:layout_weight="0.05" />
+
+            <Button
+                android:id="@+id/urlRegisterButton"
+                android:layout_width="fill_parent"
+                android:layout_height="0px"
+                android:layout_weight="0.45"
+                android:background="@drawable/btn_urlregister_selector"
+                android:onClick="onClick"
+                android:text="URL 주소 등록하기"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="0.545"
         android:weightSum="1" >
 
         <View
@@ -41,19 +99,19 @@
             android:layout_width="0px"
             android:layout_height="match_parent"
             android:layout_weight="0.96"
-            android:background="@drawable/scrollbg"
             android:fillViewport="true" >
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/scrollbg"
                 android:orientation="vertical"
                 android:weightSum="1" >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:weightSum="1" >
 
                     <View
@@ -61,69 +119,17 @@
                         android:layout_height="fill_parent"
                         android:layout_weight="0.03" />
 
-                    <ImageView
-                        android:id="@+id/cafeImageView"
-                        android:layout_width="0px"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.29"
-                        android:src="@drawable/baasio_logo" />
-
-                    <View
-                        android:layout_width="0px"
-                        android:layout_height="fill_parent"
-                        android:layout_weight="0.06" />
-
-                    <LinearLayout
-                        android:layout_width="0px"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.56"
-                        android:orientation="vertical"
-                        android:weightSum="1" >
-
-                        <Button
-                            android:id="@+id/imageRegisterButton"
-                            android:onClick="onClick"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0px"
-                            android:layout_weight="0.45"
-                            android:background="@drawable/btn_imageregister"
-                            android:text="이미지 등록하기"
-                            android:textSize="20sp" />
-
-                        <View
-                            android:layout_width="wrap_content"
-                            android:layout_height="0px"
-                            android:layout_weight="0.1" />
-
-                        <Button
-                            android:id="@+id/urlRegisterButton"
-                            android:onClick="onClick"
-                            android:layout_width="fill_parent"
-                            android:layout_height="0px"
-                            android:layout_weight="0.45"
-                            android:background="@drawable/btn_urlregister"
-                            android:text="URL 주소 등록하기"
-                            android:textSize="20sp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:weightSum="1" >
-
                     <EditText
                         android:id="@+id/cafeNameEditText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="3dp"
+                        android:layout_marginTop="5dp"
                         android:layout_weight="0.93"
                         android:background="@drawable/edittext_cafename"
                         android:ems="10"
-                        android:hint="  카페이름입력해주세요"
-                        android:maxLines="1" >
-
+                        android:hint="카페이름입력해주세요"
+                        android:maxLines="1"
+                        android:paddingLeft="10dp" >
                         <requestFocus />
                     </EditText>
                 </LinearLayout>
@@ -131,32 +137,36 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
                     android:weightSum="1" >
 
+                    <View
+                        android:layout_width="0px"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="0.03" />
+
                     <LinearLayout
                         android:id="@+id/categoryButton"
-                        android:onClick="onClick"
                         android:layout_width="0px"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.93"
                         android:background="@drawable/edittext_cafename"
+                        android:onClick="onClick"
                         android:weightSum="1" >
 
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:gravity="center"
                             android:layout_weight="0.84"
+                            android:gravity="center"
                             android:orientation="vertical" >
 
                             <TextView
                                 android:id="@+id/categoryTextView"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="카테고리선택해주세요" />
-
+                                android:text="카테고리선택해주세요"
+                                android:textSize="15sp" />
                         </LinearLayout>
 
                         <ImageView
@@ -171,9 +181,13 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
                     android:weightSum="1" >
+
+                    <View
+                        android:layout_width="0px"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="0.03" />
 
                     <EditText
                         android:id="@+id/cafeAddressEditText"
@@ -182,27 +196,35 @@
                         android:layout_weight="0.93"
                         android:background="@drawable/edittext_cafename"
                         android:ems="10"
-                        android:hint="  상세 주소 입력!"
-                        android:maxLines="1" >
+                        android:hint="상세 주소 입력!"
+                        android:maxLines="1"
+                        android:paddingLeft="10dp" >
 
-                        <requestFocus />
                     </EditText>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0px"
+                    android:layout_weight="0.3"
                     android:weightSum="1" >
+
+                    <View
+                        android:layout_width="0px"
+                        android:layout_height="fill_parent"
+                        android:layout_weight="0.03" />
 
                     <EditText
                         android:id="@+id/contentEditText"
                         android:layout_width="0px"
-                        android:layout_height="wrap_content"
+                        android:layout_height="fill_parent"
                         android:layout_marginTop="5dp"
                         android:layout_weight="0.93"
-                        android:background="@drawable/edittext_cafename"
-                        android:hint="내용을입력해주세요" />
+                        android:background="@drawable/bg_content"
+                        android:hint="내용을입력해주세요"
+                        android:maxLines="5"
+                        android:paddingLeft="10dp" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -222,7 +244,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_weight="0.4"
-                        android:background="@drawable/btn_register"
+                        android:background="@drawable/btn_registercafe_selector"
                         android:text="등록 취소하기"
                         android:textSize="18sp" />
 
@@ -233,12 +255,12 @@
 
                     <Button
                         android:id="@+id/registerCafeButton"
-                        android:onClick="onClick"
                         android:layout_width="0px"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_weight="0.42"
-                        android:background="@drawable/btn_register"
+                        android:background="@drawable/btn_registercafe_selector"
+                        android:onClick="onClick"
                         android:text="게시글 등록하기"
                         android:textSize="18sp" />
                 </LinearLayout>
@@ -275,7 +297,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.28"
-                android:background="@drawable/bottom_talksroom" />
+                android:background="@drawable/btn_talksroom_selector"
+                android:clickable="true" />
 
             <View
                 android:layout_width="0px"
@@ -287,7 +310,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.365"
-                android:background="@drawable/bottom_favorite" />
+                android:background="@drawable/btn_favorite_selector"
+                android:clickable="true" />
 
             <View
                 android:layout_width="0px"
@@ -299,7 +323,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.275"
-                android:background="@drawable/bottom_qa" />
+                android:background="@drawable/btn_qa_selector"
+                android:clickable="true" />
         </LinearLayout>
     </LinearLayout>
 

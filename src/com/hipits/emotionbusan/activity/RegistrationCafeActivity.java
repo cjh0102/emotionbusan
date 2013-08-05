@@ -10,6 +10,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -22,10 +23,10 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hipits.emotionbusan.InternalStorageContentProvider;
@@ -54,7 +55,7 @@ public class RegistrationCafeActivity extends Activity {
 	public static final int REQUEST_CODE_CROP_IMAGE = 2;
 
 	private ImageView cafeImageView;
-	private File imageFile;
+	private File imageFile = null;
 	private LinearLayout categoryButton;
 	private EditText contentEditText;
 	private EditText cafeNameEditText;
@@ -110,7 +111,7 @@ public class RegistrationCafeActivity extends Activity {
 			registerCafe();
 
 		} else if (id == R.id.urlRegisterButton) {
-			cafe.setCafeURL("http://ii222.blog.me/150107454004");
+			showUrlDialog();
 		} else if (id == R.id.categoryButton) {
 			showCategory();
 		}
@@ -119,8 +120,13 @@ public class RegistrationCafeActivity extends Activity {
 	public void registerCafe() {
 
 		BaasioUser user = Baas.io().getSignedInUser();
+		
+		if (ObjectUtils.isEmpty(user)) {
+			Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+			return;
+		}
 
-		if (!imageFile.exists()) {
+		if (imageFile == null) {
 			Toast.makeText(RegistrationCafeActivity.this, "이미지를 등록해주세요!",
 					Toast.LENGTH_SHORT).show();
 			return;
@@ -135,12 +141,11 @@ public class RegistrationCafeActivity extends Activity {
 		} else if (cafe.getContent().isEmpty()) {
 			Toast.makeText(this, "카페에대한 설명을 적어주세요!", Toast.LENGTH_SHORT).show();
 			return;
-		} else if (cafe.getCafeURL().isEmpty()) {
-			cafe.setCafeURL("null");
-		}
-
-		if (ObjectUtils.isEmpty(user)) {
-			Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+		} else if (cafe.getCategory() == null) {
+			Toast.makeText(this, "카테고리를 선택해주세요!", Toast.LENGTH_SHORT).show();
+			return;
+		} else if (cafe.getCafeURL() == null) {
+			Toast.makeText(this, "URL을 적어주세요!", Toast.LENGTH_SHORT).show();
 			return;
 		}
 
@@ -160,8 +165,8 @@ public class RegistrationCafeActivity extends Activity {
 			@Override
 			public void onResponse(BaasioEntity entity) {
 				if (entity != null) {
-//					FileManager.getInstance().upLoadFile(imageUri.getPath(),
-//							entity);
+					FileManager.getInstance().upLoadFile(imageFile.getPath(),
+							entity);
 				}
 			}
 
@@ -261,8 +266,19 @@ public class RegistrationCafeActivity extends Activity {
 		builder.setCancelable(true);
 		builder.create().show();
 	}
+	
+	public void showUrlDialog() {
+		Dialog dialog = new Dialog(this);
+		dialog.setContentView(R.layout.dialog_registerurl);
+		dialog.setTitle("URL 등록!!");
+		
+		dialog.show();
+	}
+	
 
 	public void showCategory() {
+		
+		final TextView categoryTextView = (TextView) findViewById(R.id.categoryTextView);
 
 		final String[] categoStrings = new String[] { "서면 카페거리",
 				"경성대학교, 부경대학교", "부산 대학교", "연산동", "기타" };
@@ -273,6 +289,7 @@ public class RegistrationCafeActivity extends Activity {
 			@Override
 			public void onClick(DialogInterface dialog, int position) {
 				cafe.setCategory(categoStrings[position]);
+				categoryTextView.setText(categoStrings[position]);
 			}
 		});
 
@@ -341,6 +358,11 @@ public class RegistrationCafeActivity extends Activity {
 	    }
 
 	public void deleteImageFile() {
+		
+		if (imageFiles.size() == 0 ) {
+			return;
+		}
+		
 		for (File file : imageFiles) {
 			file.delete();
 		}
