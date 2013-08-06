@@ -64,9 +64,9 @@ public final class R {
         public static final int writecopy=0x7f020028;
     }
     public static final class id {
-        public static final int action_settings=0x7f08002c;
+        public static final int action_settings=0x7f08002d;
         public static final int autoCompleteTextView1=0x7f080007;
-        public static final int bodyTextView=0x7f080029;
+        public static final int bodyTextView=0x7f08002a;
         public static final int cafeAddressEditText=0x7f080012;
         public static final int cafeButton=0x7f08000b;
         public static final int cafeImageView=0x7f080000;
@@ -75,18 +75,17 @@ public final class R {
         public static final int cancleButton=0x7f080014;
         public static final int categoryButton=0x7f080010;
         public static final int categoryTextView=0x7f080011;
-        public static final int commentCountTextView=0x7f08002b;
+        public static final int commentCountTextView=0x7f08002c;
         public static final int commentListView=0x7f080020;
         public static final int contentEditText=0x7f080013;
         public static final int contentTextView=0x7f080005;
         public static final int discard=0x7f080023;
-        public static final int editText1=0x7f080028;
         public static final int favoriteView=0x7f080016;
         public static final int favoritesButton=0x7f080004;
         public static final int idEditText=0x7f08001a;
         public static final int image=0x7f080022;
         public static final int imageRegisterButton=0x7f08000d;
-        public static final int imageView1=0x7f08002a;
+        public static final int imageView1=0x7f08002b;
         public static final int kakaoButton=0x7f080003;
         public static final int logOutButton=0x7f08001d;
         public static final int loginButton=0x7f080009;
@@ -104,6 +103,8 @@ public final class R {
         public static final int talksroomListView=0x7f080019;
         public static final int timeTextView=0x7f08001f;
         public static final int titleTextView=0x7f08001e;
+        public static final int urlAddressButton=0x7f080029;
+        public static final int urlEditText=0x7f080028;
         public static final int urlRegisterButton=0x7f08000e;
         public static final int webView1=0x7f080018;
         public static final int writeButton=0x7f08001c;

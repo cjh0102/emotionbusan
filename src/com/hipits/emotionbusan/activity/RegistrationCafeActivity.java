@@ -10,6 +10,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
@@ -17,12 +18,16 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,6 +36,8 @@ import android.widget.Toast;
 
 import com.hipits.emotionbusan.InternalStorageContentProvider;
 import com.hipits.emotionbusan.R;
+import com.hipits.emotionbusan.baasio.BaasioApplication;
+import com.hipits.emotionbusan.baasio.EtcUtils;
 import com.hipits.emotionbusan.manager.FileManager;
 import com.hipits.emotionbusan.manager.LoginManger;
 import com.hipits.emotionbusan.model.Cafe;
@@ -44,7 +51,7 @@ import com.kth.baasio.utils.ObjectUtils;
 import eu.janmuller.android.simplecropimage.CropImage;
 
 public class RegistrationCafeActivity extends Activity {
-	
+
 	public static final String TAG = "RegistrationCafeActivity";
 
 	public static String TEMP_PHOTO_FILE_NAME = null;
@@ -94,7 +101,7 @@ public class RegistrationCafeActivity extends Activity {
 		cafeAddressEditText = (EditText) findViewById(R.id.cafeAddressEditText);
 
 		cafe = new Cafe();
-		
+
 		imageFiles = new ArrayList<File>();
 
 	}
@@ -120,7 +127,7 @@ public class RegistrationCafeActivity extends Activity {
 	public void registerCafe() {
 
 		BaasioUser user = Baas.io().getSignedInUser();
-		
+
 		if (ObjectUtils.isEmpty(user)) {
 			Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
 			return;
@@ -185,61 +192,64 @@ public class RegistrationCafeActivity extends Activity {
 			Log.e("Result_Error", "ResultCodeError");
 			return;
 		}
-		
+
 		Bitmap bitmap;
-		
+
 		switch (requestCode) {
-		
+
 		case REQUEST_CODE_TAKE_PICTURE:
-			
+
 			Intent intent = new Intent(this, CropImage.class);
-	        intent.putExtra(CropImage.IMAGE_PATH, imageFile.getPath());
-	        intent.putExtra(CropImage.SCALE, true);
-	        intent.putExtra(CropImage.ASPECT_X, 3);
-	        intent.putExtra(CropImage.ASPECT_Y, 2);
-	        
-	        startActivityForResult(intent, REQUEST_CODE_CROP_IMAGE);
+			intent.putExtra(CropImage.IMAGE_PATH, imageFile.getPath());
+			intent.putExtra(CropImage.SCALE, true);
+			intent.putExtra(CropImage.ASPECT_X, 3);
+			intent.putExtra(CropImage.ASPECT_Y, 2);
+
+			startActivityForResult(intent, REQUEST_CODE_CROP_IMAGE);
 
 			break;
 
-        case REQUEST_CODE_GALLERY:
+		case REQUEST_CODE_GALLERY:
 
-            try {
-            	
-            	TEMP_PHOTO_FILE_NAME = "Album_" + String.valueOf(System.currentTimeMillis())
-        				+ ".jpg";
+			try {
 
-        		imageFile = new File(Environment.getExternalStorageDirectory(), TEMP_PHOTO_FILE_NAME);
-            	
-                InputStream inputStream = getContentResolver().openInputStream(data.getData());
-                FileOutputStream fileOutputStream = new FileOutputStream(imageFile);
-                copyStream(inputStream, fileOutputStream);
-                fileOutputStream.close();
-                inputStream.close();
+				TEMP_PHOTO_FILE_NAME = "Album_"
+						+ String.valueOf(System.currentTimeMillis()) + ".jpg";
 
-                startCropImage();
+				imageFile = new File(Environment.getExternalStorageDirectory(),
+						TEMP_PHOTO_FILE_NAME);
 
-            } catch (Exception e) {
+				InputStream inputStream = getContentResolver().openInputStream(
+						data.getData());
+				FileOutputStream fileOutputStream = new FileOutputStream(
+						imageFile);
+				copyStream(inputStream, fileOutputStream);
+				fileOutputStream.close();
+				inputStream.close();
 
-                Log.e(TAG, "Error while creating temp file", e);
-            }
+				startCropImage();
 
-            break;
-		
+			} catch (Exception e) {
+
+				Log.e(TAG, "Error while creating temp file", e);
+			}
+
+			break;
+
 		case REQUEST_CODE_CROP_IMAGE:
-			
-			  String path = data.getStringExtra(CropImage.IMAGE_PATH);
-              if (path == null) {
 
-                  return;
-              }
+			String path = data.getStringExtra(CropImage.IMAGE_PATH);
+			if (path == null) {
 
-              bitmap = BitmapFactory.decodeFile(imageFile.getPath());
-              cafeImageView.setImageBitmap(bitmap);
-              
-              imageFiles.add(imageFile);
-              
-              break;
+				return;
+			}
+
+			bitmap = BitmapFactory.decodeFile(imageFile.getPath());
+			cafeImageView.setImageBitmap(bitmap);
+
+			imageFiles.add(imageFile);
+
+			break;
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -250,12 +260,12 @@ public class RegistrationCafeActivity extends Activity {
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("앨범");
-		builder.setItems(menus, new OnClickListener() {
-			@Override
+		builder.setItems(menus, new DialogInterface.OnClickListener() {
+
 			public void onClick(DialogInterface dialog, int position) {
 				if (position == REQUEST_CODE_TAKE_PICTURE) {
 					takePicture();
-					
+
 				} else if (position == REQUEST_CODE_GALLERY) {
 					openGallery();
 				}
@@ -266,18 +276,62 @@ public class RegistrationCafeActivity extends Activity {
 		builder.setCancelable(true);
 		builder.create().show();
 	}
-	
+
 	public void showUrlDialog() {
-		Dialog dialog = new Dialog(this);
-		dialog.setContentView(R.layout.dialog_registerurl);
-		dialog.setTitle("URL 등록!!");
-		
+
+		View view = getLayoutInflater().inflate(R.layout.dialog_registerurl,
+				null);
+
+		final Dialog dialog = new Dialog(this);
+		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		dialog.setContentView(view);
+		dialog.getWindow().setBackgroundDrawable(
+				new ColorDrawable(Color.TRANSPARENT));
+
+		WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+		params.dimAmount = 0.5f;
+		dialog.getWindow().setAttributes(params);
+
+		final EditText urlEditText = (EditText) view.findViewById(R.id.urlEditText);
+
+		view.findViewById(R.id.urlAddressButton).setOnClickListener(
+				new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						String url = urlEditText.getText().toString().trim();
+						if (findURL(url)) {
+							Toast.makeText(RegistrationCafeActivity.this,
+									"이미 등록한 카페!.", Toast.LENGTH_SHORT)
+									.show();
+							return;
+						} else {
+							Toast.makeText(RegistrationCafeActivity.this,
+									"등록 완료!.", Toast.LENGTH_SHORT)
+									.show();
+							dialog.dismiss();
+						}
+					}
+				});
+
 		dialog.show();
+
 	}
-	
+
+	public Boolean findURL(String inputURL) {
+		List<BaasioEntity> entities = ((BaasioApplication) RegistrationCafeActivity.this
+				.getApplicationContext()).getCafes();
+
+		for (BaasioEntity baasioEntity : entities) {
+			String url = EtcUtils.getStringFromEntity(baasioEntity, "cafeURL");
+			if (url.equals(inputURL)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public void showCategory() {
-		
+
 		final TextView categoryTextView = (TextView) findViewById(R.id.categoryTextView);
 
 		final String[] categoStrings = new String[] { "서면 카페거리",
@@ -305,12 +359,13 @@ public class RegistrationCafeActivity extends Activity {
 			Uri mImageCaptureUri = null;
 			String state = Environment.getExternalStorageState();
 			if (Environment.MEDIA_MOUNTED.equals(state)) {
-				
-				TEMP_PHOTO_FILE_NAME = "Cam_" + String.valueOf(System.currentTimeMillis())
-						+ ".jpg";
-				
-				imageFile = new File(Environment.getExternalStorageDirectory(), TEMP_PHOTO_FILE_NAME);
-				
+
+				TEMP_PHOTO_FILE_NAME = "Cam_"
+						+ String.valueOf(System.currentTimeMillis()) + ".jpg";
+
+				imageFile = new File(Environment.getExternalStorageDirectory(),
+						TEMP_PHOTO_FILE_NAME);
+
 				mImageCaptureUri = Uri.fromFile(imageFile);
 			} else {
 				/*
@@ -329,40 +384,41 @@ public class RegistrationCafeActivity extends Activity {
 			Log.d(TAG, "cannot take picture", e);
 		}
 	}
-	
-	 private void openGallery() {
-	        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-	        photoPickerIntent.setType("image/*");
-	        startActivityForResult(photoPickerIntent, REQUEST_CODE_GALLERY);
-	    }
-	 
-	 public static void copyStream(InputStream input, OutputStream output)
-	            throws IOException {
 
-	        byte[] buffer = new byte[1024];
-	        int bytesRead;
-	        while ((bytesRead = input.read(buffer)) != -1) {
-	            output.write(buffer, 0, bytesRead);
-	        }
-	    }
-	 private void startCropImage() {
+	private void openGallery() {
+		Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+		photoPickerIntent.setType("image/*");
+		startActivityForResult(photoPickerIntent, REQUEST_CODE_GALLERY);
+	}
 
-	        Intent intent = new Intent(this, CropImage.class);
-	        intent.putExtra(CropImage.IMAGE_PATH, imageFile.getPath());
-	        intent.putExtra(CropImage.SCALE, true);
+	public static void copyStream(InputStream input, OutputStream output)
+			throws IOException {
 
-	        intent.putExtra(CropImage.ASPECT_X, 3);
-	        intent.putExtra(CropImage.ASPECT_Y, 2);
+		byte[] buffer = new byte[1024];
+		int bytesRead;
+		while ((bytesRead = input.read(buffer)) != -1) {
+			output.write(buffer, 0, bytesRead);
+		}
+	}
 
-	        startActivityForResult(intent, REQUEST_CODE_CROP_IMAGE);
-	    }
+	private void startCropImage() {
+
+		Intent intent = new Intent(this, CropImage.class);
+		intent.putExtra(CropImage.IMAGE_PATH, imageFile.getPath());
+		intent.putExtra(CropImage.SCALE, true);
+
+		intent.putExtra(CropImage.ASPECT_X, 3);
+		intent.putExtra(CropImage.ASPECT_Y, 2);
+
+		startActivityForResult(intent, REQUEST_CODE_CROP_IMAGE);
+	}
 
 	public void deleteImageFile() {
-		
-		if (imageFiles.size() == 0 ) {
+
+		if (imageFiles.size() == 0) {
 			return;
 		}
-		
+
 		for (File file : imageFiles) {
 			file.delete();
 		}
