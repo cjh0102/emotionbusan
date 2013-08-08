@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="0px"
         android:layout_weight="0.12"
-        android:background="@drawable/topbg"
+        android:background="@drawable/top_bg"
         android:gravity="center_horizontal"
         android:orientation="vertical" >
 

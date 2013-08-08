@@ -7,72 +7,228 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:weightSum="1"
         android:layout_height="0px"
-        android:layout_weight="0.23" >
+        android:layout_weight="0.12"
+        android:background="@drawable/top_bg"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
 
         <ImageView
-            android:id="@+id/cafeImageView"
-            android:layout_width="0px"
-            android:layout_weight="0.4"
+            android:id="@+id/logoImageView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/baasio_logo" />
+            android:clickable="true"
+            android:src="@drawable/btn_toplogo_selector" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0px"
+        android:layout_weight="0.02" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="0.75"
+        android:weightSum="1" >
+
+        <View
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.02" />
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.6"
-            android:orientation="vertical" >
+            android:layout_width="0px"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.96"
+            android:background="@drawable/scrollbg"
+            android:orientation="vertical"
+            android:weightSum="1" >
 
-            <TextView
-                android:id="@+id/cafeNameTextView"
+            <View
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="카페이름:" />
+                android:layout_height="0px"
+                android:layout_weight="0.02" />
 
-            <TextView
-                android:id="@+id/writeIdTextView"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0px"
+                android:layout_weight="0.25"
+                android:background="@drawable/cafedetail_line"
+                android:weightSum="1" >
+
+                <ImageView
+                    android:id="@+id/cafeImageView"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:padding="6dp"
+                    android:src="@drawable/camera_bg" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.6"
+                    android:orientation="vertical"
+                    android:weightSum="1" >
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="0px"
+                        android:layout_weight="0.2" />
+
+                    <TextView
+                        android:id="@+id/cafeNameTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Name: " />
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="0px"
+                        android:layout_weight="0.25" />
+
+                    <TextView
+                        android:id="@+id/writeIdTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="I D: " />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="작성ID:" />
+                android:layout_height="0px"
+                android:layout_weight="0.02" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.10"
+                android:weightSum="1" >
+
+                <View
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.05" />
+
+                <Button
+                    android:id="@+id/kakaoButton"
+                    android:onClick="onClick"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:background="@drawable/btn_imageregister_selector"
+                    android:text="카카오톡공유" />
+
+                <View
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.02" />
+
+                <Button
+                    android:id="@+id/favoritesButton"
+                    android:onClick="onClick"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:background="@drawable/btn_imageregister_selector"
+                    android:text="즐겨찾기" />
+            </LinearLayout>
+
+            <ScrollView
+                android:id="@+id/scrollView1"
+                android:layout_width="match_parent"
+                android:layout_margin="10dp"
+                android:padding="10dp"
+                android:layout_height="0px"
+                android:background="@drawable/bg_content"
+                android:layout_weight="0.5">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/contentTextView"
+                        android:layout_width="wrap_content"
+                        android:text="12312313131231"
+                        android:layout_height="0px"
+                        android:layout_weight="0.15"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                </LinearLayout>
+            </ScrollView>
+
+            <Button
+                android:id="@+id/reviewButton"
+                android:layout_marginLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="0px"
+                android:layout_weight="0.1"
+                android:background="@drawable/btn_registercafe_selector"
+                android:text="Review 상세보기" />
         </LinearLayout>
-        
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:weightSum="1"
-        android:layout_weight="0.10" >
+        android:layout_height="0px"
+        android:layout_weight="0.115"
+        android:background="@drawable/bottom_bg"
+        android:orientation="vertical"
+        android:weightSum="1" >
 
-        <Button
-            android:id="@+id/kakaoButton"
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
-            android:layout_height="wrap_content"
-            android:text="카카오톡공유" />
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0px"
+            android:layout_weight="0.15" />
 
-        <Button
-            android:id="@+id/favoritesButton"
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
-            android:layout_height="wrap_content"
-            android:text="즐겨찾기" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.79"
+            android:weightSum="1" >
 
+            <View
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.023" />
+
+            <View
+                android:id="@+id/talksRoomView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.28"
+                android:background="@drawable/btn_talksroom_selector"
+                android:clickable="true" />
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.02" />
+
+            <View
+                android:id="@+id/favoriteView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.365"
+                android:background="@drawable/btn_favorite_selector"
+                android:clickable="true" />
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.014" />
+
+            <View
+                android:id="@+id/qaView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.275"
+                android:background="@drawable/btn_qa_selector"
+                android:clickable="true" />
+        </LinearLayout>
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/contentTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Medium Text"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <Button
-        android:id="@+id/reviewButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="리뷰보기" />
 
 </LinearLayout>
