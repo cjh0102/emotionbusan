@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +22,7 @@ import android.widget.Toast;
 
 import com.hipits.emotionbusan.R;
 import com.hipits.emotionbusan.adapter.TalksRoomListAdapter;
+import com.hipits.emotionbusan.baasio.EtcUtils;
 import com.hipits.emotionbusan.manager.LoginManger;
 import com.kth.baasio.Baas;
 import com.kth.baasio.callback.BaasioCallback;
@@ -38,7 +43,7 @@ public class TalksRoomActivity extends Activity {
 	private TalksRoomListAdapter adapter;
 	private ListView talksRoomListView;
 	private List<BaasioEntity> comments;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -47,56 +52,43 @@ public class TalksRoomActivity extends Activity {
 		getEntities();
 
 		final LoginManger loginManger = LoginManger.getInstance(this);
-		final EditText idEditText = (EditText) findViewById(R.id.idEditText);
-		final EditText passwordEditText = (EditText) findViewById(R.id.passwordEditText);
-
-		findViewById(R.id.loginButton).setOnClickListener(
-				new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						loginManger.signIn("oprt12@gmail.com", "123456");
-						getEntities();
-					}
-				});
 
 		findViewById(R.id.writeButton).setOnClickListener(
 				new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						writePost("title", "내용입니다");
-
-					}
-				});
-
-		findViewById(R.id.logOutButton).setOnClickListener(
-				new OnClickListener() {
-					@Override
-					public void onClick(View arg0) {
-						LoginManger.getInstance(getApplicationContext())
-								.logOut();
+						showInputDialog();
 					}
 				});
 	}
 
 	private void deletePost(final int position) {
 
-		if (ObjectUtils.isEmpty(Baas.io().getSignedInUser())) {
+		BaasioUser user = Baas.io().getSignedInUser();
+
+		if (ObjectUtils.isEmpty(user)) {
 			Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
 			return;
 		}
 
 		BaasioEntity post = posts.get(position);
-		
+
 		if (!ObjectUtils.isEmpty(post)) {
-			deleteComments(post);
+			String postUserName = EtcUtils.getStringFromEntity(post,
+					"writer_username");
+			if (!user.getUsername().equals(postUserName)) {
+				Toast.makeText(this, "삭제 권한이 없습니다.", Toast.LENGTH_SHORT).show();
+				return;
+			}
 		}
-		
+
+		deleteComments(post);
 
 		post.deleteInBackground(new BaasioCallback<BaasioEntity>() {
 
 			@Override
 			public void onResponse(BaasioEntity entity) {
-				
+
 				if (!ObjectUtils.isEmpty(entity)) {
 					Toast.makeText(TalksRoomActivity.this, "삭제성공",
 							Toast.LENGTH_SHORT).show();
@@ -113,7 +105,7 @@ public class TalksRoomActivity extends Activity {
 	}
 
 	public void writePost(String title, String body) {
-		
+
 		if (ObjectUtils.isEmpty(Baas.io().getSignedInUser())) {
 			Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
 			return;
@@ -121,7 +113,7 @@ public class TalksRoomActivity extends Activity {
 
 		BaasioUser user = Baas.io().getSignedInUser();
 		BaasioEntity entity = new BaasioEntity(ENTITY_TYPE);
-		
+
 		entity.setProperty("writer_username", user.getUsername());
 		entity.setProperty("writer_uuid", user.getUuid().toString());
 		entity.setProperty("title", title);
@@ -150,8 +142,11 @@ public class TalksRoomActivity extends Activity {
 
 		posts = new ArrayList<BaasioEntity>();
 		comments = new ArrayList<BaasioEntity>();
-		
+
 		if (ObjectUtils.isEmpty(query)) {
+
+			final ProgressDialog dialog = ProgressDialog.show(this, "알림",
+					"데이터 로딩중");
 
 			query = new BaasioQuery();
 			query.setType(ENTITY_TYPE);
@@ -166,11 +161,14 @@ public class TalksRoomActivity extends Activity {
 					posts = BaasioBaseEntity.toType(entities,
 							BaasioEntity.class);
 
+					dialog.dismiss();
+
 					displayList();
 				}
 
 				@Override
 				public void onException(BaasioException e) {
+					dialog.dismiss();
 					Toast.makeText(TalksRoomActivity.this,
 							"queryInBackground =>" + e.toString(),
 							Toast.LENGTH_LONG).show();
@@ -178,57 +176,99 @@ public class TalksRoomActivity extends Activity {
 			});
 		}
 	}
-	
+
 	private void deleteComments(BaasioEntity post) {
-		
+
 		if (ObjectUtils.isEmpty(Baas.io().getSignedInUser())) {
 			Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
 			return;
 		}
-		
+
 		BaasioQuery query = new BaasioQuery();
 		query.setType("comment");
 		query.setRelation(post, "write_comment");
 		query.queryInBackground(new BaasioQueryCallback() {
-			
+
 			@Override
-			public void onResponse(List<BaasioBaseEntity> entities, List<Object> arg1,
-					BaasioQuery arg2, long arg3) {
-			
+			public void onResponse(List<BaasioBaseEntity> entities,
+					List<Object> arg1, BaasioQuery arg2, long arg3) {
+
 				comments = BaasioEntity.toType(entities, BaasioEntity.class);
-				
+
 				if (comments.isEmpty()) {
 					return;
 				}
-				
+
 				for (BaasioEntity comment : comments) {
-		
+
 					comment.deleteInBackground(new BaasioCallback<BaasioEntity>() {
-						
+
 						@Override
 						public void onResponse(BaasioEntity arg0) {
 							comments.remove(arg0);
-							
+
 						}
-						
+
 						@Override
 						public void onException(BaasioException arg0) {
-							
+
 						}
 					});
 				}
 			}
-			
+
 			@Override
 			public void onException(BaasioException arg0) {
-				
+
 			}
 		});
-		
+
+	}
+
+	public void showInputDialog() {
+
+		View view = getLayoutInflater()
+				.inflate(R.layout.dialog_talksroom, null);
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		final AlertDialog dialog;
+
+		builder.setTitle("게시글 쓰기");
+		builder.setView(view);
+
+		dialog = builder.create();
+		dialog.show();
+
+		final EditText titleEditText = (EditText) view
+				.findViewById(R.id.titleEditText);
+		final EditText bodyEditText = (EditText) view
+				.findViewById(R.id.bodyEditText);
+
+		view.findViewById(R.id.writePostButton).setOnClickListener(
+				new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						String title = titleEditText.getText().toString()
+								.trim();
+						String body = bodyEditText.getText().toString().trim();
+
+						if (title.equals("")|| title.isEmpty()) {
+							Toast.makeText(TalksRoomActivity.this,
+									"제목입력 해주세요!", Toast.LENGTH_SHORT).show();
+
+						} else if (body.equals("") || body.isEmpty()) {
+							Toast.makeText(TalksRoomActivity.this,
+									"내용을 입력해주세요!", Toast.LENGTH_SHORT).show();
+						} else {
+							writePost(title, body);
+							dialog.dismiss();
+						}
+					}
+				});
 	}
 
 	public void displayList() {
-		
+
 		talksRoomListView = (ListView) findViewById(R.id.talksroomListView);
 		adapter = new TalksRoomListAdapter(TalksRoomActivity.this, posts);
 		talksRoomListView.setAdapter(adapter);
@@ -243,16 +283,42 @@ public class TalksRoomActivity extends Activity {
 				startActivity(intent);
 			}
 		});
-		
-		talksRoomListView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
-			@Override
-			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-					int position, long arg3) {
-				deletePost(position);
-				return false;
-			}
-		});
-		
+		talksRoomListView
+				.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+					@Override
+					public boolean onItemLongClick(AdapterView<?> arg0,
+							View arg1, final int position, long arg3) {
+
+						AlertDialog.Builder builder = new AlertDialog.Builder(
+								TalksRoomActivity.this);
+
+						builder.setTitle("삭제!");
+						builder.setMessage("글을 삭제하시겠습니까?");
+
+						builder.setPositiveButton("예",
+								new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										deletePost(position);
+									}
+								});
+
+						builder.setNegativeButton("아니요",
+								new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+
+									}
+								});
+
+						builder.create().show();
+
+						return false;
+					}
+				});
 	}
 }

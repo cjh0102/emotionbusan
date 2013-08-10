@@ -2,52 +2,184 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-
-    <ListView
-        android:id="@+id/talksroomListView"
-        android:layout_width="match_parent"
-        android:layout_height="324dp" >
-    </ListView>
-
-    <EditText
-        android:id="@+id/idEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="아이디 입력" />
-
-
-    <EditText
-        android:id="@+id/passwordEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-       	android:hint="비밀번호 입력"
-         />
+    android:orientation="vertical"
+    android:weightSum="1" >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="0px"
+        android:layout_weight="0.12"
+        android:background="@drawable/top_bg"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/loginButton"
+        <ImageView
+            android:id="@+id/logoImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="로그인" />
+            android:clickable="true"
+            android:src="@drawable/btn_toplogo_selector" />
+    </LinearLayout>
 
-        <Button
-            android:id="@+id/writeButton"
-            android:layout_width="wrap_content"
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0px"
+        android:layout_weight="0.015" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="0.75"
+        android:weightSum="1" >
+
+        <View
+            android:layout_width="0px"
             android:layout_height="wrap_content"
-            android:text="글쓰기" />
+            android:layout_weight="0.02" />
 
-        <Button
-        	android:id="@+id/logOutButton"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:text="로그아웃"/>
+        <LinearLayout
+            android:layout_width="0px"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.96"
+            android:background="@drawable/scrollbg"
+            android:orientation="vertical"
+            android:weightSum="1" >
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0px"
+                android:layout_weight="0.22"
+                android:orientation="vertical"
+                android:weightSum="1" >
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="0px"
+                    android:layout_weight="0.03" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0px"
+                    android:layout_weight="0.50"
+                    android:weightSum="1" >
+
+                    <View
+                        android:layout_width="0px"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="0.73"
+                        android:background="@drawable/talksroom_title" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0px"
+                    android:layout_weight="0.4"
+                    android:orientation="vertical"
+                    android:weightSum="1" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:text="카페,커피관련 + 기타 잡담방" />
+
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="8dp"
+                        android:background="@drawable/talksromm_line" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/talksroomListView"
+                android:layout_width="match_parent"
+                android:dividerHeight="0px"
+                android:divider="#FFFFFF"
+                android:layout_height="0px"
+                android:layout_weight="0.65" >
+            </ListView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0px"
+                android:layout_weight="0.11"
+                android:gravity="right"
+                android:weightSum="1" >
+
+                <Button
+                    android:id="@+id/writeButton"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/btn_registercafe_selector"
+                    android:text="게시 글쓰기" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="0.115"
+        android:background="@drawable/bottom_bg"
+        android:orientation="vertical"
+        android:weightSum="1" >
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0px"
+            android:layout_weight="0.15" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.79"
+            android:weightSum="1" >
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.023" />
+
+            <View
+                android:id="@+id/talksRoomView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.28"
+                android:background="@drawable/btn_talksroom_selector"
+                android:clickable="true" />
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.02" />
+
+            <View
+                android:id="@+id/favoriteView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.365"
+                android:background="@drawable/btn_favorite_selector"
+                android:clickable="true" />
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.014" />
+
+            <View
+                android:id="@+id/qaView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.275"
+                android:background="@drawable/btn_qa_selector"
+                android:clickable="true" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

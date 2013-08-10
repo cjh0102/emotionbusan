@@ -13,7 +13,6 @@ import com.kth.baasio.exception.BaasioException;
 public class LoginManger {
 
 	private static LoginManger manger;
-	private Boolean isLogin = false;
 	private Context context;
 
 	public LoginManger(Context context) {
@@ -42,14 +41,12 @@ public class LoginManger {
 									R.string.NVALID_USERNAME_OR_PASSWORD_ERROR,
 									Toast.LENGTH_SHORT).show();
 						}
-						setIsLogin(false);
 						return;
 					}
 
 					@Override
 					public void onResponse(BaasioUser response) {
 						if (response != null) {
-							setIsLogin(true);
 						}
 					}
 				});
@@ -64,31 +61,12 @@ public class LoginManger {
 					@Override
 					public void onException(BaasioException e) {
 						Log.e("signException", e.getMessage());
-						setIsLogin(false);
 					}
 
 					@Override
 					public void onResponse(BaasioUser response) {
-						setIsLogin(true);
 					}
 				});
 	}
 
-	public void sintOut() {
-		BaasioUser.signOut(context);
-		isLogin = false;
-	}
-
-	public void logOut() {
-		BaasioUser.signOut(context);
-		isLogin = false;
-	}
-
-	public Boolean getIsLogin() {
-		return isLogin;
-	}
-
-	public void setIsLogin(Boolean isLogin) {
-		this.isLogin = isLogin;
-	}
 }

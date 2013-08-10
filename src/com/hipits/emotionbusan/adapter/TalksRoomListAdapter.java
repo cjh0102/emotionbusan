@@ -58,16 +58,13 @@ public class TalksRoomListAdapter extends BaseAdapter {
 		BaasioEntity entity = entities.get(position);
 
 		TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
-		TextView timeTextView = (TextView) view.findViewById(R.id.timeTextView);
 		TextView commentCountTextView = (TextView) view.findViewById(R.id.commentCountTextView);
+		TextView idTextView = (TextView) view.findViewById(R.id.idTextView);
 		
-		commentCountTextView.setText("" + EtcUtils.getIntFromEntity(entity, "commentCount", 15));
+		setStringToView(entity, idTextView, "writer_username");
 		setStringToView(entity, titleTextView, "title");
 		
-		if (entity.getCreated() != null) {
-			String createdTime = EtcUtils.getDateString(entity.getCreated());
-			timeTextView.setText(createdTime);
-		}
+		commentCountTextView.setText("" + EtcUtils.getIntFromEntity(entity, "commentCount", 15));
 		
 		return view;
 	}

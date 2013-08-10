@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.hipits.emotionbusan.activity.CafeDetailActivity;
 import com.hipits.emotionbusan.activity.RegistrationCafeActivity;
+import com.hipits.emotionbusan.activity.TalksRoomActivity;
 import com.hipits.emotionbusan.baasio.BaasioApplication;
 import com.hipits.emotionbusan.manager.LoginManger;
 import com.kth.baasio.callback.BaasioQueryCallback;
@@ -30,7 +31,9 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		application = (BaasioApplication) this.getApplicationContext();
-		queryCafes();
+//		queryCafes();
+		
+		startActivity(new Intent(this, TalksRoomActivity.class));
 
 	}
 

@@ -4,22 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hipits.emotionbusan.R;
 import com.hipits.emotionbusan.adapter.CommentListAdapter;
 import com.hipits.emotionbusan.baasio.EtcUtils;
-import com.hipits.emotionbusan.manager.LoginManger;
+import com.kth.baasio.Baas;
 import com.kth.baasio.callback.BaasioCallback;
 import com.kth.baasio.callback.BaasioQueryCallback;
 import com.kth.baasio.entity.BaasioBaseEntity;
 import com.kth.baasio.entity.entity.BaasioEntity;
+import com.kth.baasio.entity.user.BaasioUser;
 import com.kth.baasio.exception.BaasioException;
 import com.kth.baasio.query.BaasioQuery;
 import com.kth.baasio.utils.JsonUtils;
@@ -72,8 +76,7 @@ public class TalksRoomDetailActivity extends Activity {
 				new OnClickListener() {
 					@Override
 					public void onClick(View arg0) {
-						String body = "comment";
-						writeComment(body);
+						showWriteCommentDialog();
 					}
 				});
 	}
@@ -112,13 +115,51 @@ public class TalksRoomDetailActivity extends Activity {
 			String value) {
 		view.setText(EtcUtils.getStringFromEntity(entity, value));
 	}
+	
+	public void showWriteCommentDialog() {
+		
+		View view = getLayoutInflater().inflate(R.layout.dialog_comment, null);
+		
+		final AlertDialog dialog;
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle("댓글 달기");
+		builder.setView(view);
+		
+		dialog = builder.create();
+		dialog.show();
+		
+		final EditText commentEditText = (EditText) view.findViewById(R.id.bodyEditText);
+		
+		view.findViewById(R.id.writeCommentButton).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				String commentBody = commentEditText.getText().toString().trim();
+				if (commentBody.isEmpty() || commentBody.equals("")) {
+					Toast.makeText(TalksRoomDetailActivity.this,
+							"댓글을 입력해주세요!", Toast.LENGTH_SHORT).show();
+				} else {
+					writeComment(commentBody);
+					dialog.dismiss();
+				}
+			}
+		});
+	}
+	
 
 	public void writeComment(String comment) {
-
-		LoginManger.getInstance(this).signIn("oprt12@gmail.com", "123456");
+		
+		if (ObjectUtils.isEmpty(Baas.io().getSignedInUser())) {
+			Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		
+		BaasioUser user = Baas.io().getSignedInUser();
 
 		BaasioEntity commentEntity = new BaasioEntity("comment");
+
 		commentEntity.setProperty("body", comment);
+		commentEntity.setProperty("writer_username", user.getUsername());
 		commentEntity.saveInBackground(new BaasioCallback<BaasioEntity>() {
 			@Override
 			public void onException(BaasioException arg0) {

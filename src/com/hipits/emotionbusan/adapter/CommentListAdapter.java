@@ -56,8 +56,10 @@ public class CommentListAdapter extends BaseAdapter {
 
         TextView bodyTextView = (TextView) view.findViewById(R.id.bodyTextView);
         TextView timeTextView = (TextView) view.findViewById(R.id.timeTextView);
-      
+        TextView idTextView = (TextView) view.findViewById(R.id.idTextView);
+        
         setStringToView(comment, bodyTextView, "body");
+        setStringToView(comment, idTextView, "writer_username");
         
         if (comment.getCreated() != null) {
         	String createdTime = EtcUtils.getDateString(comment.getCreated());

@@ -1,44 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1" >
 
-    <TextView
-    	android:id="@+id/titleTextView"
-    	android:layout_width="wrap_content"
-    	android:layout_height="wrap_content"
-    	android:text="Medium Text"
-    	android:textAppearance="?android:attr/textAppearanceMedium"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="0.12"
+        android:background="@drawable/top_bg"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
 
-    <TextView
-    	android:id="@+id/contentTextView"
-    	android:layout_width="wrap_content"
-    	android:layout_height="wrap_content"
-    	android:text="TextView"/>
+        <ImageView
+            android:id="@+id/logoImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:src="@drawable/btn_toplogo_selector" />
+    </LinearLayout>
 
-    <TextView
-    	android:id="@+id/timeTextView"
-    	android:layout_width="wrap_content"
-    	android:layout_height="wrap_content"
-    	android:text="TextView"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_margin="5dp"
+        android:layout_weight="0.4"
+        android:background="@drawable/bg_content"
+        android:orientation="vertical"
+        android:weightSum="1" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="0.15"
+            android:weightSum="1" >
+
+            <TextView
+                android:id="@+id/titleTextView"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="0.4"
+                android:gravity="center_vertical"
+                android:text="제목"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.15"
+            android:background="@drawable/cafedetail_line"
+            android:weightSum="1" >
+
+            <TextView
+                android:id="@+id/timeTextView"
+                android:layout_width="0px"
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="0.86"
+                android:gravity="center_vertical"
+                android:text="TextView" />
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.4" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:layout_margin="10dp"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/contentTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="TextView" />
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="0.2"
+            android:weightSum="1" >
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.47" />
+
+            <Button
+                android:id="@+id/writeCommentButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:background="@drawable/btn_urlregister_selector"
+                android:text="코멘트 달기" />
+        </LinearLayout>
+    </LinearLayout>
 
     <ListView
-    	android:id="@+id/commentListView"
-    	android:layout_width="match_parent"
-    	android:layout_height="241dp">
+        android:id="@+id/commentListView"
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="0.366"
+        android:divider="#FFFFFF"
+        android:dividerHeight="0px" >
     </ListView>
 
     <LinearLayout
-    	android:layout_width="match_parent"
-    	android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="0.115"
+        android:background="@drawable/bottom_bg"
+        android:orientation="vertical"
+        android:weightSum="1" >
 
-        <Button
-        	android:id="@+id/writeCommentButton"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:text="Button"/>
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0px"
+            android:layout_weight="0.15" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.79"
+            android:weightSum="1" >
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.023" />
+
+            <View
+                android:id="@+id/talksRoomView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.28"
+                android:background="@drawable/btn_talksroom_selector"
+                android:clickable="true" />
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.02" />
+
+            <View
+                android:id="@+id/favoriteView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.365"
+                android:background="@drawable/btn_favorite_selector"
+                android:clickable="true" />
+
+            <View
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.014" />
+
+            <View
+                android:id="@+id/qaView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.275"
+                android:background="@drawable/btn_qa_selector"
+                android:clickable="true" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
