@@ -12,16 +12,20 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.hipits.emotionbusan.activity.CafeDetailActivity;
+import com.hipits.emotionbusan.activity.LoginActivity;
 import com.hipits.emotionbusan.activity.RegistrationCafeActivity;
 import com.hipits.emotionbusan.activity.TalksRoomActivity;
 import com.hipits.emotionbusan.baasio.BaasioApplication;
 import com.hipits.emotionbusan.manager.LoginManger;
+import com.kth.baasio.Baas;
 import com.kth.baasio.callback.BaasioQueryCallback;
 import com.kth.baasio.entity.BaasioBaseEntity;
 import com.kth.baasio.entity.entity.BaasioEntity;
+import com.kth.baasio.entity.user.BaasioUser;
 import com.kth.baasio.exception.BaasioException;
 import com.kth.baasio.query.BaasioQuery;
 import com.kth.baasio.query.BaasioQuery.ORDER_BY;
+import com.kth.baasio.utils.ObjectUtils;
 
 public class MainActivity extends Activity {
 	private BaasioApplication application;
@@ -31,8 +35,8 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		application = (BaasioApplication) this.getApplicationContext();
-//		queryCafes();
-		
+		// queryCafes();
+
 		startActivity(new Intent(this, TalksRoomActivity.class));
 
 	}
@@ -59,8 +63,9 @@ public class MainActivity extends Activity {
 			intent.putExtra("cafe", cafe.toString());
 
 		} else if (id == R.id.loginButton) {
-			LoginManger.getInstance(this).signIn("junhwan", "123456");
-			return;
+			intent = new Intent(this, LoginActivity.class);
+		} else if (id == R.id.logOutButton) {
+			LoginManger.getInstance(this).signOut();
 		}
 
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -69,13 +74,11 @@ public class MainActivity extends Activity {
 
 	public void queryCafes() {
 
-		// BaasioUser user = Baas.io().getSignedInUser();
+		BaasioUser user = Baas.io().getSignedInUser();
 
-		// if (ObjectUtils.isEmpty(user)) {
-		// Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
-		// }
-
-		LoginManger.getInstance(this).signIn("oprt12@gmail.com", "123456");
+		if (ObjectUtils.isEmpty(user)) {
+			Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+		}
 
 		final ProgressDialog dialog = ProgressDialog
 				.show(this, "알림", "데이터 로딩중");
@@ -104,5 +107,4 @@ public class MainActivity extends Activity {
 			}
 		});
 	}
-
 }

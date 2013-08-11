@@ -71,4 +71,10 @@
         android:onClick="onClick"
         android:text="카페보기" />
 
+    <Button
+        android:id="@+id/logOutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="로그아웃" />
+
 </LinearLayout>
