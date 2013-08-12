@@ -35,7 +35,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		application = (BaasioApplication) this.getApplicationContext();
-		// queryCafes();
+		queryCafes();
 
 		startActivity(new Intent(this, TalksRoomActivity.class));
 
@@ -66,6 +66,8 @@ public class MainActivity extends Activity {
 			intent = new Intent(this, LoginActivity.class);
 		} else if (id == R.id.logOutButton) {
 			LoginManger.getInstance(this).signOut();
+		} else if (id == R.id.signupButton) {
+			
 		}
 
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

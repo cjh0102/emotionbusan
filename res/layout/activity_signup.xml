@@ -55,7 +55,6 @@
 
             <EditText
                 android:id="@+id/idEditText"
-                android:maxLines="1"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginLeft="15dp"
@@ -63,11 +62,28 @@
                 android:layout_weight="0.13"
                 android:background="@drawable/bg_content"
                 android:ems="10"
-                android:inputType="textEmailAddress"
                 android:hint="e-maill을 입력해주세요!"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
                 android:paddingLeft="10dp" >
 
                 <requestFocus />
+            </EditText>
+
+            <EditText
+                android:id="@+id/userNameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_weight="0.13"
+                android:background="@drawable/bg_content"
+                android:ems="10"
+                android:hint="닉네임 입력해주세요!"
+                android:maxLines="1"
+                android:paddingLeft="10dp" >
+
             </EditText>
 
             <EditText
@@ -79,17 +95,29 @@
                 android:layout_marginTop="15dp"
                 android:layout_weight="0.13"
                 android:background="@drawable/bg_content"
-                android:maxLines="1"
-                android:inputType="textPassword" 
                 android:ems="10"
                 android:hint="비밀번호를 입력해주세요!"
+                android:inputType="textPassword"
+                android:maxLines="1"
                 android:paddingLeft="10dp" >
             </EditText>
 
-            <View
+            <LinearLayout
                 android:layout_width="fill_parent"
+                android:orientation="vertical"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
                 android:layout_height="0px"
-                android:layout_weight="0.1" />
+                android:layout_weight="0.1" >
+
+                <TextView
+                    android:textColor="#FF0000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="* 아이디 리셋이외, 비밀번호 찾기가 불가하오니 참고해주세요!"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -100,17 +128,7 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.2" />
-
-                <Button
-                    android:id="@+id/loginButton"
-                    android:layout_width="0px"
-                    android:layout_height="fill_parent"
-                    android:layout_marginLeft="20dp"
-                    android:layout_weight="0.35"
-                    android:background="@drawable/btn_registercafe_selector"
-                    android:onClick="onClick"
-                    android:text="로그인 하기" />
+                    android:layout_weight="0.55" />
 
                 <Button
                     android:id="@+id/signupButton"
@@ -121,7 +139,6 @@
                     android:background="@drawable/btn_registercafe_selector"
                     android:onClick="onClick"
                     android:text="회원 등록" />
-                
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
